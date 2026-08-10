@@ -5,10 +5,12 @@ import { useEffect, useRef } from "react";
 /**
  * StarfieldBackground
  * A hand-built <canvas> night sky:
- *  - 3 parallax layers of twinkling stars (each star breathes on its own phase)
- *  - slow-drifting constellation lines that link nearby "bright" stars
+ *  - parallax twinkling stars (each star breathes on its own phase)
+ *  - slow-drifting constellation lines linking nearby bright stars
  *  - occasional shooting stars with a fading tail
- *  - a subtle cursor parallax so the sky reacts to the visitor
+ *  - cursor parallax on desktop; gentle auto-sway on touch devices
+ * Mobile-hardened: sizes from the visual viewport, ignores the address-bar
+ * height jitter, re-tunes density on rotate, and caps DPR for performance.
  * Respects prefers-reduced-motion (renders a still sky, no RAF loop).
  */
 export default function StarfieldBackground() {
@@ -18,48 +20,62 @@ export default function StarfieldBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
     let width = 0;
     let height = 0;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let dpr = 1;
     let stars = [];
     let brightStars = [];
     let shootingStars = [];
     let raf = 0;
     let t = 0;
+    let lastBuildW = 0;
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
 
+    function viewport() {
+      // On mobile, innerWidth/innerHeight track the visual viewport reliably.
+      return {
+        w: window.innerWidth || document.documentElement.clientWidth,
+        h: window.innerHeight || document.documentElement.clientHeight,
+      };
+    }
+
     function build() {
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const { w, h } = viewport();
+      width = w;
+      height = h;
+      lastBuildW = w;
+      // Lighter DPR on phones keeps the paint cheap while staying crisp.
+      dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 2 : 2);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const density = Math.min(260, Math.floor((width * height) / 6500));
+      // Denser floor on small screens so the sky never looks empty.
+      const area = width * height;
+      const density = Math.max(
+        isTouch ? 90 : 70,
+        Math.min(260, Math.floor(area / (isTouch ? 5200 : 6500)))
+      );
       stars = new Array(density).fill(0).map(() => {
-        const layer = Math.random(); // 0..1 -> depth
+        const layer = Math.random();
         return {
           x: Math.random() * width,
           y: Math.random() * height,
-          r: 0.4 + layer * 1.7,
-          depth: 0.25 + layer * 1, // parallax strength
-          baseA: 0.35 + Math.random() * 0.6,
+          r: (0.5 + layer * 1.7) * (isTouch ? 1.15 : 1),
+          depth: 0.25 + layer * 1,
+          baseA: 0.45 + Math.random() * 0.55,
           twPhase: Math.random() * Math.PI * 2,
           twSpeed: 0.6 + Math.random() * 1.6,
           hue: Math.random() < 0.18 ? 42 : Math.random() < 0.3 ? 265 : 210,
         };
       });
 
-      // pick a handful of bright anchor stars for constellation lines
-      brightStars = stars
-        .filter((s) => s.r > 1.4)
-        .slice(0, 22)
-        .map((s) => s);
+      brightStars = stars.filter((s) => s.r > 1.5).slice(0, 22);
     }
 
     function spawnShootingStar() {
@@ -79,15 +95,19 @@ export default function StarfieldBackground() {
     function draw() {
       t += 1;
 
-      // ease pointer toward target for smooth parallax
+      if (isTouch) {
+        // no cursor on touch — sway the sky gently so it still feels alive
+        pointer.tx = 0.5 + Math.sin(t * 0.004) * 0.5;
+        pointer.ty = 0.5 + Math.cos(t * 0.003) * 0.5;
+      }
       pointer.x += (pointer.tx - pointer.x) * 0.04;
       pointer.y += (pointer.ty - pointer.y) * 0.04;
-      const px = (pointer.x - 0.5) * 30;
-      const py = (pointer.y - 0.5) * 30;
+      const px = (pointer.x - 0.5) * (isTouch ? 16 : 30);
+      const py = (pointer.y - 0.5) * (isTouch ? 16 : 30);
 
       ctx.clearRect(0, 0, width, height);
 
-      // ---- constellation lines (drawn under the stars) ----
+      // constellation lines
       ctx.lineWidth = 1;
       for (let i = 0; i < brightStars.length; i++) {
         for (let j = i + 1; j < brightStars.length; j++) {
@@ -97,12 +117,9 @@ export default function StarfieldBackground() {
           const ay = a.y + py * a.depth;
           const bx = b.x + px * b.depth;
           const by = b.y + py * b.depth;
-          const dx = ax - bx;
-          const dy = ay - by;
-          const dist = Math.hypot(dx, dy);
+          const dist = Math.hypot(ax - bx, ay - by);
           if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.16;
-            ctx.strokeStyle = `rgba(167, 139, 250, ${alpha})`;
+            ctx.strokeStyle = `rgba(244, 63, 94, ${(1 - dist / 150) * 0.16})`;
             ctx.beginPath();
             ctx.moveTo(ax, ay);
             ctx.lineTo(bx, by);
@@ -111,7 +128,7 @@ export default function StarfieldBackground() {
         }
       }
 
-      // ---- stars ----
+      // stars
       for (const s of stars) {
         const tw = reduced
           ? s.baseA
@@ -120,28 +137,27 @@ export default function StarfieldBackground() {
         const y = s.y + py * s.depth;
         const color =
           s.hue === 42
-            ? `rgba(255, 214, 130, ${tw})`
+            ? `rgba(255, 194, 150, ${tw})`
             : s.hue === 265
-            ? `rgba(190, 165, 255, ${tw})`
-            : `rgba(226, 232, 255, ${tw})`;
+            ? `rgba(255, 150, 175, ${tw})`
+            : `rgba(255, 236, 240, ${tw})`;
         ctx.beginPath();
         ctx.fillStyle = color;
         ctx.arc(x, y, s.r, 0, Math.PI * 2);
         ctx.fill();
 
-        // soft glow for the biggest stars
-        if (s.r > 1.5) {
+        if (s.r > 1.6) {
           ctx.beginPath();
           ctx.fillStyle =
             s.hue === 42
-              ? `rgba(255, 207, 92, ${tw * 0.14})`
-              : `rgba(167, 139, 250, ${tw * 0.14})`;
+              ? `rgba(255, 140, 110, ${tw * 0.16})`
+              : `rgba(244, 63, 94, ${tw * 0.18})`;
           ctx.arc(x, y, s.r * 4, 0, Math.PI * 2);
           ctx.fill();
         }
       }
 
-      // ---- shooting stars ----
+      // shooting stars
       if (!reduced) {
         for (const sh of shootingStars) {
           sh.x += sh.vx;
@@ -153,8 +169,9 @@ export default function StarfieldBackground() {
               : sh.life > sh.max - 15
               ? Math.max(0, (sh.max - sh.life) / 15)
               : 1;
-          const tailX = sh.x - (sh.vx / Math.hypot(sh.vx, sh.vy)) * sh.len;
-          const tailY = sh.y - (sh.vy / Math.hypot(sh.vx, sh.vy)) * sh.len;
+          const norm = Math.hypot(sh.vx, sh.vy);
+          const tailX = sh.x - (sh.vx / norm) * sh.len;
+          const tailY = sh.y - (sh.vy / norm) * sh.len;
           const grad = ctx.createLinearGradient(sh.x, sh.y, tailX, tailY);
           grad.addColorStop(0, `rgba(255, 240, 200, ${0.9 * fade})`);
           grad.addColorStop(1, "rgba(255, 240, 200, 0)");
@@ -164,7 +181,6 @@ export default function StarfieldBackground() {
           ctx.moveTo(sh.x, sh.y);
           ctx.lineTo(tailX, tailY);
           ctx.stroke();
-          // head
           ctx.beginPath();
           ctx.fillStyle = `rgba(255, 255, 240, ${fade})`;
           ctx.arc(sh.x, sh.y, 1.8, 0, Math.PI * 2);
@@ -173,7 +189,6 @@ export default function StarfieldBackground() {
         shootingStars = shootingStars.filter(
           (s) => s.life < s.max && s.x > -80 && s.x < width + 80
         );
-        // occasionally launch one
         if (t % 4 === 0 && Math.random() < 0.14 && shootingStars.length < 2) {
           spawnShootingStar();
         }
@@ -182,14 +197,26 @@ export default function StarfieldBackground() {
       raf = requestAnimationFrame(draw);
     }
 
+    let resizeTimer = 0;
     function onResize() {
-      build();
-      if (reduced) {
-        // draw a single still frame
-        cancelAnimationFrame(raf);
-        draw();
-        cancelAnimationFrame(raf);
-      }
+      // Ignore height-only changes (mobile browser chrome show/hide) to avoid
+      // constant rebuilds/flicker while scrolling; only rebuild on width change.
+      const { w } = viewport();
+      if (Math.abs(w - lastBuildW) < 2) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        build();
+        if (reduced) {
+          cancelAnimationFrame(raf);
+          draw();
+          cancelAnimationFrame(raf);
+        }
+      }, 150);
+    }
+
+    function onOrientation() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(build, 250);
     }
 
     function onPointer(e) {
@@ -203,13 +230,16 @@ export default function StarfieldBackground() {
       cancelAnimationFrame(raf);
     } else {
       raf = requestAnimationFrame(draw);
-      window.addEventListener("pointermove", onPointer, { passive: true });
+      if (!isTouch) window.addEventListener("pointermove", onPointer, { passive: true });
     }
     window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onOrientation);
 
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onOrientation);
       window.removeEventListener("pointermove", onPointer);
     };
   }, []);
@@ -217,30 +247,11 @@ export default function StarfieldBackground() {
   return (
     <div
       aria-hidden="true"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 0,
-        pointerEvents: "none",
-        background:
-          "radial-gradient(1200px 700px at 50% -10%, #141c4d 0%, #0b1030 45%, #070b1e 100%)",
-      }}
+      className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(1200px_700px_at_50%_-10%,#3a1024_0%,#1f0916_45%,#150610_100%)]"
     >
-      {/* drifting nebula clouds */}
       <div className="nebula" />
-      <canvas
-        ref={canvasRef}
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-      />
-      {/* faint bottom vignette so foreground text stays readable */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(180deg, transparent 55%, rgba(7,11,30,0.55) 100%)",
-        }}
-      />
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(21,6,16,0.55)_100%)]" />
     </div>
   );
 }

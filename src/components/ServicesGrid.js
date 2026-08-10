@@ -3,9 +3,9 @@ import { services } from "@/lib/data";
 import SectionHeading from "./SectionHeading";
 
 const accentGlow = {
-  gold: "rgba(245,166,35,0.18)",
-  rose: "rgba(224,69,123,0.18)",
-  violet: "rgba(124,58,237,0.20)",
+  gold: "rgba(225,29,72,0.22)",
+  rose: "rgba(244,63,94,0.22)",
+  violet: "rgba(147,51,234,0.20)",
 };
 
 export default function ServicesGrid() {

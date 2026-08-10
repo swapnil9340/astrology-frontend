@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import ChatBubbleOutlineIcon from "@mui/icons-material/Chat";
 import { navLinks } from "@/lib/data";
 
 export default function Header() {
@@ -15,147 +18,89 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   return (
     <header
-      className={scrolled ? "glass" : ""}
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
-        transition: "background 0.3s ease, border-color 0.3s ease",
-      }}
+      className={`sticky top-0 z-50 transition-colors duration-300 ${
+        scrolled ? "glass border-b border-white/10" : "border-b border-transparent"
+      }`}
     >
-      <div
-        className="container-x"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 68,
-        }}
-      >
+      <div className="container-x flex items-center justify-between h-[64px]">
         {/* Logo */}
-        <Link
-          href="/"
-          style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
-        >
-          <span
-            className="glow-pulse"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              background: "radial-gradient(circle at 35% 30%, #ffe6a1, #f5a623 60%, #e07a1f)",
-              fontSize: 20,
-            }}
-          >
+        <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0" onClick={() => setOpen(false)}>
+          <span className="glow-pulse grid place-items-center w-10 h-10 rounded-full text-xl bg-[radial-gradient(circle_at_35%_30%,#ff9aa5,#e11d48_60%,#a80f2f)]">
             🔯
           </span>
-          <span className="font-display" style={{ fontSize: 24, fontWeight: 700 }}>
-            <span style={{ color: "var(--ink)" }}>Astro</span>
+          <span className="font-display text-[22px] sm:text-2xl font-bold">
+            <span className="text-ink">Astro</span>
             <span className="gold-text">Veda</span>
           </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hide-mobile" style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <nav className="hidden lg:flex items-center gap-1">
           {navLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              style={{
-                color: "var(--ink-dim)",
-                textDecoration: "none",
-                padding: "8px 12px",
-                fontSize: 15,
-                borderRadius: 8,
-                transition: "color 0.2s, background 0.2s",
-              }}
-              className="nav-link"
+              className="text-ink-dim hover:text-gold-400 hover:bg-white/5 no-underline px-3 py-2 text-[15px] rounded-lg transition-colors"
             >
               {l.label}
             </Link>
           ))}
         </nav>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="flex items-center gap-2.5">
           <Link
             href="/#astrologers"
-            className="btn-gold hide-mobile"
-            style={{ padding: "9px 18px", borderRadius: 999, textDecoration: "none", fontSize: 14 }}
+            className="btn-gold hidden sm:inline-flex items-center gap-1.5 px-[18px] py-[9px] rounded-full no-underline text-sm"
           >
-            Talk to Astrologer
+            <ChatBubbleOutlineIcon sx={{ fontSize: 16 }} /> Talk to Astrologer
           </Link>
-          {/* Hamburger */}
+
+          {/* Hamburger — visible below lg */}
           <button
             onClick={() => setOpen((v) => !v)}
-            aria-label="Menu"
-            className="show-mobile"
-            style={{
-              background: "transparent",
-              border: "1px solid var(--line)",
-              borderRadius: 10,
-              width: 42,
-              height: 42,
-              color: "var(--ink)",
-              fontSize: 20,
-              cursor: "pointer",
-            }}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className="lg:hidden grid place-items-center w-11 h-11 rounded-[10px] border border-white/10 text-ink bg-white/5 active:scale-95 transition-transform"
           >
-            {open ? "✕" : "☰"}
+            {open ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {open && (
-        <div className="glass show-mobile" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="container-x" style={{ paddingBlock: 12, display: "grid", gap: 4 }}>
-            {navLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                style={{
-                  color: "var(--ink)",
-                  textDecoration: "none",
-                  padding: "12px 8px",
-                  borderRadius: 8,
-                  borderBottom: "1px solid var(--line)",
-                }}
-              >
-                {l.label}
-              </Link>
-            ))}
+      <div
+        className={`lg:hidden overflow-hidden transition-[max-height,opacity] duration-300 glass ${
+          open ? "max-h-[80vh] opacity-100 border-t border-white/10" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="container-x py-3 grid gap-1">
+          {navLinks.map((l) => (
             <Link
-              href="/#astrologers"
+              key={l.href}
+              href={l.href}
               onClick={() => setOpen(false)}
-              className="btn-gold"
-              style={{
-                textAlign: "center",
-                padding: "12px",
-                borderRadius: 999,
-                textDecoration: "none",
-                marginTop: 8,
-              }}
+              className="text-ink no-underline px-2 py-3 rounded-lg border-b border-white/10 hover:bg-white/5"
             >
-              Talk to Astrologer
+              {l.label}
             </Link>
-          </div>
-        </div>
-      )}
-
-      <style>{`
-        .nav-link:hover { color: var(--gold-400) !important; background: rgba(255,255,255,0.04); }
-        .show-mobile { display: none; }
-        @media (max-width: 860px) {
-          .hide-mobile { display: none !important; }
-          .show-mobile { display: inline-flex; }
-        }
-      `}</style>
+          ))}
+          <Link
+            href="/#astrologers"
+            onClick={() => setOpen(false)}
+            className="btn-gold inline-flex items-center justify-center gap-1.5 text-center px-3 py-3 rounded-full no-underline mt-2"
+          >
+            <ChatBubbleOutlineIcon sx={{ fontSize: 18 }} /> Talk to Astrologer
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 }

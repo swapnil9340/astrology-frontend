@@ -1,22 +1,8 @@
-import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import StarfieldBackground from "@/components/StarfieldBackground";
+import ThemeRegistry from "@/components/ThemeRegistry";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-playfair",
-  display: "swap",
-});
 
 export const metadata = {
   title: "AstroVeda — Free Kundli, Horoscope & Talk to Astrologers",
@@ -26,14 +12,25 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${playfair.variable}`}>
+    <html lang="en">
+      <head>
+        {/* Fonts loaded at runtime (no compile-time network fetch) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
-        <StarfieldBackground />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </div>
+        <ThemeRegistry>
+          <StarfieldBackground />
+          <div className="relative z-[1]">
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </div>
+        </ThemeRegistry>
       </body>
     </html>
   );

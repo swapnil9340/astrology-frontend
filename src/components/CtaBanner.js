@@ -9,9 +9,9 @@ export default function CtaBanner() {
             textAlign: "center",
             position: "relative",
             overflow: "hidden",
-            border: "1px solid rgba(245,166,35,0.35)",
+            border: "1px solid rgba(225,29,72,0.4)",
             background:
-              "radial-gradient(120% 140% at 50% 0%, rgba(124,58,237,0.35), rgba(11,16,48,0.6) 55%)",
+              "radial-gradient(120% 140% at 50% 0%, rgba(225,29,72,0.38), rgba(31,9,22,0.65) 55%)",
           }}
         >
           <div className="nebula" style={{ opacity: 0.5 }} />

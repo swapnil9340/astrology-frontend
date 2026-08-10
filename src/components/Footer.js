@@ -23,9 +23,9 @@ const cols = [
     title: "Company",
     links: [
       ["About Us", "/about"],
+      ["Contact Us", "/contact"],
+      ["Disclaimer", "/disclaimer"],
       ["Talk to Astrologer", "/#astrologers"],
-      ["Careers", "/careers"],
-      ["Contact", "/contact"],
     ],
   },
 ];
