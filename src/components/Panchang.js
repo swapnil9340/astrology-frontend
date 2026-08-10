@@ -44,7 +44,7 @@ export default function Panchang() {
               width: 220,
               height: 220,
               borderRadius: "50%",
-              border: "1px dashed rgba(167,139,250,0.25)",
+              border: "1px dashed rgba(244,63,94,0.28)",
             }}
           />
           <SectionHeading

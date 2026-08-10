@@ -39,7 +39,7 @@ export default function ZodiacGrid() {
                     cursor: "pointer",
                     textAlign: "center",
                     border: selected ? "1px solid var(--gold-500)" : "1px solid var(--line)",
-                    background: selected ? "rgba(245,166,35,0.12)" : undefined,
+                    background: selected ? "rgba(225,29,72,0.15)" : undefined,
                     transition: "transform 0.2s, border-color 0.2s, background 0.2s",
                     color: "inherit",
                   }}

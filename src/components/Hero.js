@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { zodiacSigns } from "@/lib/data";
+
+const inputClass =
+  "w-full px-3 py-[11px] rounded-[10px] border border-white/10 bg-[rgba(7,11,30,0.5)] text-ink text-[15px] outline-none [color-scheme:dark] focus:border-gold-500/60 transition-colors";
 
 export default function Hero() {
   const [form, setForm] = useState({ name: "", date: "", time: "", place: "" });
@@ -14,156 +20,89 @@ export default function Hero() {
   function onSubmit(e) {
     e.preventDefault();
     if (!form.date) return;
-    // Simple deterministic "moon sign" pick from the birth date — demo only.
     const day = new Date(form.date).getDate() || 1;
     const sign = zodiacSigns[(day - 1) % 12];
     setResult({ sign, name: form.name.trim() || "Friend" });
   }
 
   return (
-    <section style={{ position: "relative", paddingTop: 70, paddingBottom: 40 }}>
-      <div
-        className="container-x"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.1fr 0.9fr",
-          gap: 48,
-          alignItems: "center",
-        }}
-      >
+    <section className="relative pt-[70px] pb-10">
+      <div className="container-x grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
         {/* Left: headline */}
-        <div className="fade-up hero-copy">
-          <span
-            className="glass"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "6px 14px",
-              borderRadius: 999,
-              fontSize: 13,
-              color: "var(--gold-400)",
-              marginBottom: 22,
-            }}
-          >
-            ✨ Trusted by 50 Lakh+ seekers
+        <div className="fade-up text-center lg:text-left">
+          <span className="glass inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[13px] text-gold-400 mb-5">
+            <AutoAwesomeIcon sx={{ fontSize: 15 }} /> Trusted by 50 Lakh+ seekers
           </span>
-          <h1
-            className="font-display"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 3.6rem)", lineHeight: 1.1, fontWeight: 700, margin: 0 }}
-          >
+          <h1 className="font-display text-[clamp(2.1rem,5vw,3.6rem)] leading-[1.1] font-bold m-0">
             Discover what the <span className="gold-text">stars</span> have written for you
           </h1>
-          <p style={{ color: "var(--ink-dim)", fontSize: 18, lineHeight: 1.7, marginTop: 20, maxWidth: 520 }}>
+          <p className="text-ink-dim text-[17px] sm:text-lg leading-[1.7] mt-5 max-w-[520px] mx-auto lg:mx-0">
             Free Vedic Kundli, daily horoscope, marriage matching and honest remedies —
             all in one place. Generate your birth chart in seconds.
           </p>
-          <div style={{ display: "flex", gap: 28, marginTop: 30, flexWrap: "wrap" }}>
+          <div className="flex gap-7 mt-7 flex-wrap justify-center lg:justify-start">
             {[
               ["50L+", "Kundlis made"],
               ["1200+", "Astrologers"],
               ["4.9★", "App rating"],
             ].map(([n, l]) => (
               <div key={l}>
-                <div className="gold-text font-display" style={{ fontSize: 26, fontWeight: 700 }}>{n}</div>
-                <div style={{ color: "var(--ink-dim)", fontSize: 13 }}>{l}</div>
+                <div className="gold-text font-display text-[26px] font-bold">{n}</div>
+                <div className="text-ink-dim text-[13px]">{l}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Right: Kundli form / result */}
-        <div className="glass card-hover fade-up" style={{ borderRadius: 22, padding: 28, position: "relative", overflow: "hidden" }}>
-          {/* rotating zodiac ring accent */}
-          <div
-            aria-hidden
-            className="spin-slow"
-            style={{
-              position: "absolute",
-              right: -60,
-              top: -60,
-              width: 180,
-              height: 180,
-              borderRadius: "50%",
-              border: "1px dashed rgba(255,207,92,0.35)",
-            }}
-          />
+        <div className="glass card-hover fade-up rounded-[22px] p-5 sm:p-7 relative overflow-hidden">
+          <div className="spin-slow absolute -right-[60px] -top-[60px] w-[180px] h-[180px] rounded-full border border-dashed border-gold-400/35" aria-hidden />
           {!result ? (
             <>
-              <h3 className="font-display" style={{ fontSize: 22, fontWeight: 600, marginTop: 0, marginBottom: 4 }}>
-                Get your Free Kundli 🪔
-              </h3>
-              <p style={{ color: "var(--ink-dim)", fontSize: 14, marginTop: 0, marginBottom: 20 }}>
-                Enter your birth details to begin.
-              </p>
-              <form onSubmit={onSubmit} style={{ display: "grid", gap: 14 }}>
-                <Field label="Full name">
-                  <input value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name" style={inputStyle} />
-                </Field>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                  <Field label="Date of birth">
-                    <input type="date" required value={form.date} onChange={(e) => update("date", e.target.value)} style={inputStyle} />
-                  </Field>
-                  <Field label="Time of birth">
-                    <input type="time" value={form.time} onChange={(e) => update("time", e.target.value)} style={inputStyle} />
-                  </Field>
+              <h3 className="font-display text-[22px] font-semibold mt-0 mb-1">Get your Free Kundli 🪔</h3>
+              <p className="text-ink-dim text-sm mt-0 mb-5">Enter your birth details to begin.</p>
+              <form onSubmit={onSubmit} className="grid gap-3.5">
+                <label className="grid gap-1.5 text-left">
+                  <span className="text-[13px] text-ink-dim">Full name</span>
+                  <input value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name" className={inputClass} />
+                </label>
+                <div className="grid grid-cols-2 gap-3.5">
+                  <label className="grid gap-1.5 text-left">
+                    <span className="text-[13px] text-ink-dim">Date of birth</span>
+                    <input type="date" required value={form.date} onChange={(e) => update("date", e.target.value)} className={inputClass} />
+                  </label>
+                  <label className="grid gap-1.5 text-left">
+                    <span className="text-[13px] text-ink-dim">Time of birth</span>
+                    <input type="time" value={form.time} onChange={(e) => update("time", e.target.value)} className={inputClass} />
+                  </label>
                 </div>
-                <Field label="Place of birth">
-                  <input value={form.place} onChange={(e) => update("place", e.target.value)} placeholder="City, Country" style={inputStyle} />
-                </Field>
-                <button type="submit" className="btn-gold" style={{ padding: "13px", borderRadius: 12, border: "none", cursor: "pointer", fontSize: 16, marginTop: 4 }}>
-                  Generate My Kundli →
+                <label className="grid gap-1.5 text-left">
+                  <span className="text-[13px] text-ink-dim">Place of birth</span>
+                  <input value={form.place} onChange={(e) => update("place", e.target.value)} placeholder="City, Country" className={inputClass} />
+                </label>
+                <button type="submit" className="btn-gold inline-flex items-center justify-center gap-1.5 py-[13px] rounded-xl border-none cursor-pointer text-base mt-1">
+                  Generate My Kundli <ArrowForwardIcon sx={{ fontSize: 18 }} />
                 </button>
               </form>
             </>
           ) : (
-            <div style={{ textAlign: "center", paddingBlock: 10 }}>
-              <div className="float-y" style={{ fontSize: 60 }}>{result.sign.symbol}</div>
-              <h3 className="font-display" style={{ fontSize: 24, marginBottom: 4 }}>
-                Namaste, {result.name}!
-              </h3>
-              <p style={{ color: "var(--ink-dim)", marginTop: 0 }}>Your moon sign is</p>
-              <div className="gold-text font-display" style={{ fontSize: 34, fontWeight: 700 }}>
-                {result.sign.name} <span style={{ fontSize: 20 }}>({result.sign.hindi})</span>
+            <div className="text-center py-2.5">
+              <div className="float-y text-6xl">{result.sign.symbol}</div>
+              <h3 className="font-display text-2xl mb-1">Namaste, {result.name}!</h3>
+              <p className="text-ink-dim mt-0">Your moon sign is</p>
+              <div className="gold-text font-display text-[34px] font-bold">
+                {result.sign.name} <span className="text-xl">({result.sign.hindi})</span>
               </div>
-              <div className="glass" style={{ borderRadius: 12, padding: "12px 16px", marginTop: 18, fontSize: 14, color: "var(--ink-dim)" }}>
+              <div className="glass rounded-xl px-4 py-3 mt-4 text-sm text-ink-dim">
                 Element: {result.sign.element} • {result.sign.dates}
               </div>
-              <button onClick={() => setResult(null)} className="btn-gold" style={{ padding: "11px 20px", borderRadius: 999, border: "none", cursor: "pointer", marginTop: 20 }}>
-                ← Try another
+              <button onClick={() => setResult(null)} className="btn-gold inline-flex items-center gap-1.5 px-5 py-[11px] rounded-full border-none cursor-pointer mt-5">
+                <ArrowBackIcon sx={{ fontSize: 18 }} /> Try another
               </button>
             </div>
           )}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 900px) {
-          .hero-copy { text-align: center; }
-          section > .container-x { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }
-
-function Field({ label, children }) {
-  return (
-    <label style={{ display: "grid", gap: 6, textAlign: "left" }}>
-      <span style={{ fontSize: 13, color: "var(--ink-dim)" }}>{label}</span>
-      {children}
-    </label>
-  );
-}
-
-const inputStyle = {
-  width: "100%",
-  padding: "11px 12px",
-  borderRadius: 10,
-  border: "1px solid var(--line)",
-  background: "rgba(7,11,30,0.5)",
-  color: "var(--ink)",
-  fontSize: 15,
-  outline: "none",
-  colorScheme: "dark",
-};
