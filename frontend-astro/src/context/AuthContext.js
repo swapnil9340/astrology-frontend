@@ -1,0 +1,75 @@
+"use client";
+
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { apiLogin, apiRegister, apiMe } from "@/lib/api";
+
+const STORAGE_KEY = "astroveda_token";
+const AuthContext = createContext(null);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // hydrating from storage
+
+  // On mount, restore any saved token and verify it against the API.
+  useEffect(() => {
+    let active = true;
+    let saved = null;
+    try {
+      saved = localStorage.getItem(STORAGE_KEY);
+    } catch {
+      saved = null;
+    }
+    if (!saved) {
+      setLoading(false);
+      return;
+    }
+    apiMe(saved)
+      .then((data) => {
+        if (!active) return;
+        setToken(saved);
+        setUser(data.user);
+      })
+      .catch(() => {
+        try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      })
+      .finally(() => active && setLoading(false));
+    return () => { active = false; };
+  }, []);
+
+  const persist = useCallback((tok, usr) => {
+    setToken(tok);
+    setUser(usr);
+    try { localStorage.setItem(STORAGE_KEY, tok); } catch {}
+  }, []);
+
+  const login = useCallback(async (email, password) => {
+    const data = await apiLogin({ email, password });
+    persist(data.token, data.user);
+    return data.user;
+  }, [persist]);
+
+  const register = useCallback(async (name, email, password) => {
+    const data = await apiRegister({ name, email, password });
+    persist(data.token, data.user);
+    return data.user;
+  }, [persist]);
+
+  const logout = useCallback(() => {
+    setToken(null);
+    setUser(null);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within <AuthProvider>");
+  return ctx;
+}

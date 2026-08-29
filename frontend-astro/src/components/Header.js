@@ -5,11 +5,16 @@ import { useState, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ChatBubbleOutlineIcon from "@mui/icons-material/Chat";
+import PersonOutlineIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { navLinks } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout, loading } = useAuth();
+  const firstName = user?.name?.split(" ")[0];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -56,9 +61,36 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2.5">
+          {/* Auth control (desktop / tablet) */}
+          {!loading && (
+            user ? (
+              <div className="hidden sm:flex items-center gap-1.5">
+                <span className="glass inline-flex items-center gap-1.5 pl-2.5 pr-3 py-[7px] rounded-full text-sm text-ink">
+                  <PersonOutlineIcon sx={{ fontSize: 18 }} className="text-gold-400" />
+                  {firstName}
+                </span>
+                <button
+                  onClick={logout}
+                  aria-label="Log out"
+                  title="Log out"
+                  className="grid place-items-center w-9 h-9 rounded-full border border-white/10 text-ink-dim hover:text-rose-500 hover:border-rose-500/40 transition-colors"
+                >
+                  <LogoutIcon sx={{ fontSize: 18 }} />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-[9px] rounded-full no-underline text-sm text-ink border border-white/15 hover:border-gold-500/50 hover:text-gold-400 transition-colors"
+              >
+                <PersonOutlineIcon sx={{ fontSize: 16 }} /> Sign in
+              </Link>
+            )
+          )}
+
           <Link
             href="/#astrologers"
-            className="btn-gold hidden sm:inline-flex items-center gap-1.5 px-[18px] py-[9px] rounded-full no-underline text-sm"
+            className="btn-gold hidden md:inline-flex items-center gap-1.5 px-[18px] py-[9px] rounded-full no-underline text-sm"
           >
             <ChatBubbleOutlineIcon sx={{ fontSize: 16 }} /> Talk to Astrologer
           </Link>
@@ -99,6 +131,41 @@ export default function Header() {
           >
             <ChatBubbleOutlineIcon sx={{ fontSize: 18 }} /> Talk to Astrologer
           </Link>
+
+          {/* Auth (mobile) */}
+          {!loading && (
+            user ? (
+              <div className="mt-2 grid gap-2">
+                <span className="inline-flex items-center gap-2 text-ink text-sm px-2">
+                  <PersonOutlineIcon sx={{ fontSize: 18 }} className="text-gold-400" />
+                  Signed in as {firstName}
+                </span>
+                <button
+                  onClick={() => { logout(); setOpen(false); }}
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-3 rounded-full border border-white/15 text-ink hover:text-rose-500 hover:border-rose-500/40 transition-colors"
+                >
+                  <LogoutIcon sx={{ fontSize: 18 }} /> Log out
+                </button>
+              </div>
+            ) : (
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-3 rounded-full border border-white/15 text-ink no-underline hover:border-gold-500/50"
+                >
+                  <PersonOutlineIcon sx={{ fontSize: 18 }} /> Sign in
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-center px-3 py-3 rounded-full text-ink no-underline bg-white/5 hover:bg-white/10"
+                >
+                  Register
+                </Link>
+              </div>
+            )
+          )}
         </nav>
       </div>
     </header>
