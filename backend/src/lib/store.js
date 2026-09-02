@@ -1,61 +1,39 @@
 /**
- * Tiny JSON-file user store.
- * Zero-config and cross-platform — good enough to get auth working.
- * The rest of the app only talks to these functions, so this file is the
- * single place to swap in MongoDB / Postgres / Prisma later.
+ * User data layer — now backed by MongoDB (Mongoose).
+ * The rest of the app only talks to these three functions, so swapping the
+ * database only ever means editing this file. Returns plain objects with `id`
+ * (not `_id`) so controllers / publicUser() stay unchanged.
  */
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { User } from "../models/User.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, "..", "..", "data");
-const DB_FILE = path.join(DATA_DIR, "users.json");
-
-let cache = null;
-// Serialise writes so concurrent requests don't clobber the file.
-let writeChain = Promise.resolve();
-
-async function load() {
-  if (cache) return cache;
-  try {
-    const raw = await fs.readFile(DB_FILE, "utf8");
-    cache = JSON.parse(raw);
-  } catch {
-    cache = { users: [], seq: 0 };
-  }
-  return cache;
-}
-
-async function persist() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const snapshot = JSON.stringify(cache, null, 2);
-  writeChain = writeChain.then(() => fs.writeFile(DB_FILE, snapshot, "utf8"));
-  return writeChain;
+/** Map a Mongoose doc/lean object to the app's user shape. */
+function toUser(doc) {
+  if (!doc) return null;
+  return {
+    id: String(doc._id),
+    name: doc.name,
+    email: doc.email,
+    passwordHash: doc.passwordHash,
+    createdAt: doc.createdAt,
+  };
 }
 
 export async function getUserByEmail(email) {
-  const db = await load();
-  const target = String(email).toLowerCase();
-  return db.users.find((u) => u.email === target) || null;
+  const doc = await User.findOne({ email: String(email).toLowerCase() }).lean();
+  return toUser(doc);
 }
 
 export async function getUserById(id) {
-  const db = await load();
-  return db.users.find((u) => u.id === id) || null;
+  try {
+    const doc = await User.findById(id).lean();
+    return toUser(doc);
+  } catch {
+    // invalid ObjectId (e.g. stale/old token) → treat as not found
+    return null;
+  }
 }
 
 export async function createUser({ name, email, passwordHash }) {
-  const db = await load();
-  db.seq += 1;
-  const user = {
-    id: db.seq,
-    name,
-    email: String(email).toLowerCase(),
-    passwordHash,
-    createdAt: new Date().toISOString(),
-  };
-  db.users.push(user);
-  await persist();
-  return user;
+  const doc = await User.create({ name, email: String(email).toLowerCase(), passwordHash });
+  return toUser(doc.toObject());
 }
