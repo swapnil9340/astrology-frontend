@@ -88,8 +88,8 @@ export const navLinks = [
   { label: "Free Kundli", href: "/kundli" },
   { label: "Matching", href: "/kundli-matching" },
   { label: "Panchang", href: "/panchang" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Astrologers", href: "/#astrologers" },
-  { label: "Shop", href: "/#shop" },
 ];
 
 // Deterministic pseudo-horoscope so SSR and client match (no Math.random on render).

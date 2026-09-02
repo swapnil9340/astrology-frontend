@@ -54,6 +54,14 @@ export const apiPredictHistory = (token) =>
 export const apiChart = (payload) =>
   request("/api/chart", { method: "POST", body: payload });
 
+export const apiPlans = () => request("/api/plans");
+
+export const apiCreateOrder = (token, payload) =>
+  request("/api/payment/order", { method: "POST", token, body: payload });
+
+export const apiVerifyPayment = (token, payload) =>
+  request("/api/payment/verify", { method: "POST", token, body: payload });
+
 export const apiPanchang = (params = {}) => {
   const qs = new URLSearchParams(
     Object.entries(params).filter(([, v]) => v != null && v !== "")

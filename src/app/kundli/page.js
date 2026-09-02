@@ -19,12 +19,15 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import PageHero from "@/components/PageHero";
 import { useAuth } from "@/context/AuthContext";
 import { apiPredictBasic, apiPredictHistory } from "@/lib/api";
+import { startPayment } from "@/lib/payment";
 
 export default function KundliPage() {
-  const { user, token, loading } = useAuth();
+  const { user, token, loading, refreshUser } = useAuth();
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [paywall, setPaywall] = useState(false);
+  const [buying, setBuying] = useState(false);
 
   // Cost-aware: show the latest saved reading if one exists; only call the AI
   // when there is none, or when the user hits "Regenerate".
@@ -32,6 +35,7 @@ export default function KundliPage() {
     if (!token) return;
     setStatus("loading");
     setError("");
+    setPaywall(false);
     try {
       if (!force) {
         const hist = await apiPredictHistory(token);
@@ -46,6 +50,7 @@ export default function KundliPage() {
       setData({ chart: res.chart, prediction: res.prediction });
       setStatus("done");
     } catch (err) {
+      if (err.status === 402) setPaywall(true);
       setError(err.message || "Something went wrong.");
       setStatus("error");
     }
@@ -54,6 +59,19 @@ export default function KundliPage() {
   useEffect(() => {
     if (!loading && user && token && status === "idle") load(false);
   }, [loading, user, token, status, load]);
+
+  async function buyPack() {
+    setBuying(true);
+    try {
+      await startPayment({ kind: "pack", itemId: "pack10", token, user });
+      await refreshUser();
+      await load(true); // credits added → generate now
+    } catch (e) {
+      setError(e.message || "Payment fail hua.");
+    } finally {
+      setBuying(false);
+    }
+  }
 
   // --- hydrating ---
   if (loading) {
@@ -99,7 +117,29 @@ export default function KundliPage() {
           </div>
         )}
 
-        {status === "error" && (
+        {status === "error" && paywall && (
+          <div className="glass rounded-[22px] p-8 text-center max-w-[520px] mx-auto border border-gold-500/40">
+            <div className="glow-pulse mx-auto grid place-items-center w-14 h-14 rounded-full text-2xl bg-[radial-gradient(circle_at_35%_30%,#ff9aa5,#e11d48_60%,#a80f2f)]">🪔</div>
+            <h2 className="font-display text-[24px] font-bold mt-4 mb-1">Aapki free kundli poori ho gayi</h2>
+            <p className="text-ink-dim text-sm">{error}</p>
+            <div className="glass rounded-xl px-4 py-3 my-4 text-sm">
+              <span className="gold-text font-display text-lg font-bold">₹100 = 10 Kundli</span>
+              <div className="text-ink-dim">+ send & print/PDF option</div>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <button onClick={buyPack} disabled={buying}
+                className="btn-gold px-6 py-3 rounded-full border-none cursor-pointer disabled:opacity-70">
+                {buying ? "Processing…" : "Buy pack — ₹100"}
+              </button>
+              <Link href="/pricing" className="px-5 py-3 rounded-full border border-white/15 text-ink no-underline hover:border-gold-500/50">
+                See plans
+              </Link>
+            </div>
+            <p className="text-ink-dim text-[12px] mt-3 mb-0">Secure payment via Razorpay.</p>
+          </div>
+        )}
+
+        {status === "error" && !paywall && (
           <div className="glass rounded-[22px] p-8 text-center max-w-[520px] mx-auto border border-rose-500/30">
             <p className="text-ink">{error}</p>
             <button onClick={() => load(false)} className="btn-gold inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none cursor-pointer mt-4">

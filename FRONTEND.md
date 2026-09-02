@@ -102,6 +102,7 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `/horoscope` `/kundli-matching` `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
 | `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + Wikipedia info |
 | `/careers` | `app/careers/page.js` | Static careers listing |
+| `/pricing` | `app/pricing/page.js` | Subscription plans (free/silver/gold/platinum) from `/api/plans` |
 
 > Header/Footer mein kuch links (`/kundli`, `/horoscope`, `/panchang`…) abhi
 > **placeholder** hain — pages baad mein banenge.
@@ -138,7 +139,11 @@ Flow: `AuthForm` → `useAuth()` → `api.js` → backend → token localStorage
 
 - **`lib/api.js`** — `apiRegister`, `apiLogin`, `apiMe`, `apiPredictBasic(token)`,
   `apiPredictHistory(token)`, `apiPanchang(params)` (public), `apiChart(payload)` (public,
-  compute-only). Base URL `NEXT_PUBLIC_API_URL`.
+  compute-only), `apiPlans()`, `apiCreateOrder(token,payload)`, `apiVerifyPayment(token,payload)`.
+  Base URL `NEXT_PUBLIC_API_URL`.
+- **`lib/payment.js`** — `startPayment({kind,itemId,token,user})`: create order → Razorpay
+  checkout (script loaded on demand) → verify. Returns credits/subscription. Used by
+  `/pricing` (plans) and `/kundli` paywall (packs).
   `ApiError` class status + field-errors carry karti hai. Network fail pe friendly message.
 - **`context/AuthContext.js`** — `AuthProvider` (layout mein wrapped). State: `user`,
   `token`, `loading`. Mount pe localStorage se token restore karke `/me` se verify karta hai.
@@ -194,6 +199,10 @@ npm run build && npm start   # production
 | **Login / Register (API-integrated)** | ✅ Done | JWT, AuthContext, header state |
 | **Register captures birth details + phone** | ✅ Done | gender, DOB, time, place, phone → basic prediction base |
 | **Free Kundli page (`/kundli`)** | ✅ Done | login-gated; real chart + AI prediction, history-first (cost-aware), regenerate |
+| **Free-3 limit + paywall** | ✅ Done | 3 free kundlis; 402 pe paywall card (₹100=10, pack "coming soon") |
+| **Subscription plans page (`/pricing`)** | ✅ Done | plans + **live Razorpay subscribe** |
+| **Payments (Razorpay)** | ✅ Done | pack buy (paywall) + plan subscribe (pricing); verify → credits/subscription; `refreshUser()` |
+| Print/PDF · talk-to-pandit | ⏳ Planned | see PROJECT_PLAN monetization |
 | **Panchang — real-time** | ✅ Done | homepage fetches live `/api/panchang` (was hardcoded) |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
 | Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | **Wikipedia** placeholder content (`InfoPage`) — apni API se replace hoga |

@@ -56,6 +56,18 @@ export function AuthProvider({ children }) {
     return data.user;
   }, [persist]);
 
+  // Re-fetch the current user (e.g. after a payment updates credits/subscription).
+  const refreshUser = useCallback(async () => {
+    if (!token) return null;
+    try {
+      const data = await apiMe(token);
+      setUser(data.user);
+      return data.user;
+    } catch {
+      return null;
+    }
+  }, [token]);
+
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);
@@ -64,8 +76,8 @@ export function AuthProvider({ children }) {
 
   // Memoized so consumers (e.g. Header) don't re-render on unrelated renders.
   const value = useMemo(
-    () => ({ user, token, loading, login, register, logout }),
-    [user, token, loading, login, register, logout]
+    () => ({ user, token, loading, login, register, logout, refreshUser }),
+    [user, token, loading, login, register, logout, refreshUser]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
