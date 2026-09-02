@@ -1,6 +1,50 @@
 @import "tailwindcss";
 
 /* ============================================================
+   astro_swap brand webfonts (local — files in /public/fonts/astro_swap)
+   ============================================================ */
+@font-face {
+  font-family: "astro_swap_text_regular";
+  src: url("/fonts/astro_swap/astro_swap_text_rg.woff2") format("woff2"),
+    url("/fonts/astro_swap/astro_swap_text_rg.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "astro_swap_text_light";
+  src: url("/fonts/astro_swap/astro_swap_text_lt.woff2") format("woff2"),
+    url("/fonts/astro_swap/astro_swap_text_lt.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "astro_swap_text_bold";
+  src: url("/fonts/astro_swap/astro_swap_text_bd.woff2") format("woff2"),
+    url("/fonts/astro_swap/astro_swap_text_bd.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "astro_swap_headline_regular";
+  src: url("/fonts/astro_swap/astro_swap_head_rg.woff2") format("woff2"),
+    url("/fonts/astro_swap/astro_swap_head_rg.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "astro_swap_headline_bold";
+  src: url("/fonts/astro_swap/astro_swap_head_bd.woff2") format("woff2"),
+    url("/fonts/astro_swap/astro_swap_head_bd.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
    AstroVeda — Design System
    Cosmic night-sky theme: deep maroon-plum + crimson/ember + violet
    (accent tokens keep the "gold-*" names for stability but resolve
@@ -30,9 +74,16 @@
   --background: var(--night-900);
   --foreground: var(--ink);
 
-  /* Font stacks (webfonts loaded via <link> in layout head) */
-  --font-poppins: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-playfair: "Playfair Display", Georgia, "Times New Roman", serif;
+  /* Font stacks — astro_swap brand fonts, local @font-face above.
+     Body: astro_swap_text_regular · Headings: astro_swap_headline_regular */
+  --font-poppins: "astro_swap_text_regular", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-playfair: "astro_swap_headline_regular", Georgia, "Times New Roman", serif;
+
+  /* ---- Typography scale (single global knob) ---- */
+  /* Base font size — bada/chhota karna ho to sirf yahi badlo (rem isi se scale) */
+  --font-base: 100%;          /* 100% = 16px; e.g. 106.25% = 17px */
+  --leading-body: 1.6;        /* comfortable reading (1.4–1.6) */
+  --leading-heading: 1.2;
 }
 
 @theme inline {
@@ -59,6 +110,9 @@
 }
 
 html {
+  font-size: var(--font-base); /* relative units (rem) scale from here */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
 
@@ -66,9 +120,22 @@ body {
   background: var(--night-900);
   color: var(--foreground);
   font-family: var(--font-poppins), system-ui, sans-serif;
+  font-size: 1rem; /* relative to html base */
+  line-height: var(--leading-body); /* 1.6 — comfortable reading */
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+/* Headings sit tighter than body text */
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--leading-heading);
+}
+
+/* Reading text keeps comfortable spacing */
+p, li, label, input, textarea, select, button {
+  line-height: var(--leading-body);
 }
 
 .font-display {

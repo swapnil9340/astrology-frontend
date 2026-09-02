@@ -1,28 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { zodiacSigns } from "@/lib/data";
+import { useAuth } from "@/context/AuthContext";
+import { apiChart } from "@/lib/api";
+
+const signSymbol = (name) => zodiacSigns.find((z) => z.name === name)?.symbol || "✨";
 
 const inputClass =
   "w-full px-3 py-[11px] rounded-[10px] border border-white/10 bg-[rgba(7,11,30,0.5)] text-ink text-[15px] outline-none [color-scheme:dark] focus:border-gold-500/60 transition-colors";
 
 export default function Hero() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [form, setForm] = useState({ name: "", date: "", time: "", place: "" });
   const [result, setResult] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   function update(k, v) {
     setForm((f) => ({ ...f, [k]: v }));
   }
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!form.date) return;
-    const day = new Date(form.date).getDate() || 1;
-    const sign = zodiacSigns[(day - 1) % 12];
-    setResult({ sign, name: form.name.trim() || "Friend" });
+    setError("");
+    setBusy(true);
+    try {
+      // real-time compute-only chart (no login, no AI cost)
+      const res = await apiChart({
+        dateOfBirth: form.date,
+        timeOfBirth: form.time,
+        placeOfBirth: form.place,
+      });
+      setResult({ chart: res.chart, place: res.place, name: form.name.trim() || "Friend" });
+    } catch (err) {
+      setError(err.message || "Kundli generate nahi ho payi. Thodi der baad try karein.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -80,25 +101,38 @@ export default function Hero() {
                   <span className="text-[13px] text-ink-dim">Place of birth</span>
                   <input value={form.place} onChange={(e) => update("place", e.target.value)} placeholder="City, Country" className={inputClass} />
                 </label>
-                <button type="submit" className="btn-gold inline-flex items-center justify-center gap-1.5 py-[13px] rounded-xl border-none cursor-pointer text-base mt-1">
-                  Generate My Kundli <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                {error && <p className="text-rose-500 text-[13px] m-0">{error}</p>}
+                <button type="submit" disabled={busy}
+                  className="btn-gold inline-flex items-center justify-center gap-1.5 py-[13px] rounded-xl border-none cursor-pointer text-base mt-1 disabled:opacity-60 disabled:cursor-not-allowed">
+                  {busy ? "Reading the stars…" : (<>Generate My Kundli <ArrowForwardIcon sx={{ fontSize: 18 }} /></>)}
                 </button>
+                <p className="text-ink-dim text-[11px] text-center m-0">Tip: place of birth se accurate kundli banti hai.</p>
               </form>
             </>
           ) : (
             <div className="text-center py-2.5">
-              <div className="float-y text-6xl">{result.sign.symbol}</div>
+              <div className="float-y text-6xl">{signSymbol(result.chart.moonSign.sign)}</div>
               <h3 className="font-display text-2xl mb-1">Namaste, {result.name}!</h3>
-              <p className="text-ink-dim mt-0">Your moon sign is</p>
+              <p className="text-ink-dim mt-0">Your Moon sign (Rashi) is</p>
               <div className="gold-text font-display text-[34px] font-bold">
-                {result.sign.name} <span className="text-xl">({result.sign.hindi})</span>
+                {result.chart.moonSign.sign} <span className="text-xl">({result.chart.moonSign.hi})</span>
               </div>
               <div className="glass rounded-xl px-4 py-3 mt-4 text-sm text-ink-dim">
-                Element: {result.sign.element} • {result.sign.dates}
+                Nakshatra: <span className="text-ink">{result.chart.moonSign.nakshatra}</span> • Sun: <span className="text-ink">{result.chart.sunSign.sign}</span>
+                {result.chart.lagna && <> • Lagna: <span className="text-ink">{result.chart.lagna.sign}</span></>}
               </div>
-              <button onClick={() => setResult(null)} className="btn-gold inline-flex items-center gap-1.5 px-5 py-[11px] rounded-full border-none cursor-pointer mt-5">
-                <ArrowBackIcon sx={{ fontSize: 18 }} /> Try another
-              </button>
+              {result.place && <p className="text-ink-dim text-[12px] mt-2 mb-0">📍 {result.place}</p>}
+              <p className="text-ink-dim text-[12px] mt-3 mb-0">Ye real chart preview hai — poori AI kundli login ke baad.</p>
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                <button onClick={() => router.push(user ? "/kundli" : "/register")}
+                  className="btn-gold inline-flex items-center gap-1.5 px-5 py-[11px] rounded-full border-none cursor-pointer">
+                  <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Get your full AI Kundli
+                </button>
+                <button onClick={() => setResult(null)}
+                  className="inline-flex items-center gap-1.5 px-4 py-[11px] rounded-full border border-white/15 text-ink hover:border-gold-500/50 cursor-pointer">
+                  <ArrowBackIcon sx={{ fontSize: 18 }} /> Try another
+                </button>
+              </div>
             </div>
           )}
         </div>
