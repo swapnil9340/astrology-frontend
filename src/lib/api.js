@@ -72,6 +72,8 @@ export const apiChart = (payload) =>
 
 export const apiPlans = () => request("/api/plans");
 
+export const apiRashifal = (sign) => request(`/api/rashifal/${encodeURIComponent(sign)}`);
+
 export const apiCreateOrder = (token, payload) =>
   request("/api/payment/order", { method: "POST", token, body: payload });
 
