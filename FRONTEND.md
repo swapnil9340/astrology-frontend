@@ -40,7 +40,7 @@ panchang, aur **user authentication** (login/register).
 ## 3. Folder structure
 
 ```
-frontend-astro/
+astrology-frontend/          # repo root = Next.js app (flattened, no nested folder)
 ├── .env.local               # NEXT_PUBLIC_API_URL=http://localhost:5000
 ├── jsconfig.json            # "@/*" → "./src/*" import alias
 ├── next.config.mjs
@@ -129,10 +129,13 @@ Flow: `AuthForm` → `useAuth()` → `api.js` → backend → token localStorage
   `ApiError` class status + field-errors carry karti hai. Network fail pe friendly message.
 - **`context/AuthContext.js`** — `AuthProvider` (layout mein wrapped). State: `user`,
   `token`, `loading`. Mount pe localStorage se token restore karke `/me` se verify karta hai.
-  Exposes: `login(email, pw)`, `register(name, email, pw)`, `logout()`.
+  Exposes: `login(email, pw)`, `register(payload)`, `logout()`.
   Hook: `useAuth()`.
 - **`components/AuthForm.js`** — dono modes; success pe `/` redirect; server field-errors
-  inputs ke neeche dikhata hai.
+  inputs ke neeche dikhata hai. **Register form birth details bhi leta hai:** name, email,
+  phone, password, gender, date of birth, time of birth (optional), place of birth —
+  taaki signup ke turant baad basic prediction ban sake. Payload:
+  `{ name, email, password, phone, gender, dateOfBirth, timeOfBirth, placeOfBirth }`.
 - **`Header.js`** — logged-out → "Sign in"; logged-in → naam chip + logout (desktop + mobile).
 
 Token key: `localStorage["astroveda_token"]`.
@@ -152,7 +155,7 @@ Token key: `localStorage["astroveda_token"]`.
 ## 8. Run karna
 
 ```bash
-cd frontend-astro
+cd astrology-frontend   # repo root = Next.js app (flattened)
 npm install          # pehli baar
 npm run dev          # webpack dev server → http://localhost:3000
 # turbopack chahiye: npm run dev:turbo
@@ -176,6 +179,7 @@ npm run build && npm start   # production
 | Red/crimson theme | ✅ Done | Token-based |
 | Responsive + mobile hamburger | ✅ Done | |
 | **Login / Register (API-integrated)** | ✅ Done | JWT, AuthContext, header state |
+| **Register captures birth details + phone** | ✅ Done | gender, DOB, time, place, phone → basic prediction base |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
 | Sub-pages (kundli, matching, panchang, tarot…) | ⏳ Planned | Header links placeholder |
 | Protected pages / user dashboard | ⏳ Planned | "My Kundli", saved charts |
