@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import { apiLogin, apiRegister, apiMe } from "@/lib/api";
 
 const STORAGE_KEY = "astroveda_token";
@@ -62,11 +62,13 @@ export function AuthProvider({ children }) {
     try { localStorage.removeItem(STORAGE_KEY); } catch {}
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
+  // Memoized so consumers (e.g. Header) don't re-render on unrelated renders.
+  const value = useMemo(
+    () => ({ user, token, loading, login, register, logout }),
+    [user, token, loading, login, register, logout]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

@@ -17,7 +17,7 @@ panchang, aur **user authentication** (login/register).
 - **Language:** JavaScript (TypeScript nahi — sab `.js`)
 - **UI:** Tailwind CSS v4 + custom design-system classes
 - **Icons:** Material UI icons (`@mui/icons-material`)
-- **Fonts:** Poppins + Playfair Display (runtime `<link>` se, compile-time fetch nahi)
+- **Fonts:** astro_swap brand webfonts (self-hosted `@font-face`, `/public/fonts/astro_swap`)
 - **State:** React Context (auth)
 - **Default port:** `3000`, backend API `:5000`
 
@@ -29,7 +29,7 @@ panchang, aur **user authentication** (login/register).
 |-------|--------|------|
 | Styling | **Tailwind classes** (inline `style` nahi) | User preference; consistency |
 | Icons | **MUI icon components** (emoji nahi, jahan possible) | User preference |
-| Fonts | **`<link>` tags** (`next/font` nahi) | `next/font/google` compile-time pe network fetch karta hai jo offline hang ho jaata tha |
+| Fonts | **self-hosted `@font-face`** (astro_swap, local files) | brand fonts; no external fetch, no offline hang |
 | Dev compiler | **webpack** (`next dev --webpack`) | Is machine pe Turbopack MUI/Emotion ko ~70s le raha tha; webpack fast |
 | Auth token | **localStorage** | Simple starter; baad mein httpOnly cookie pe ja sakte hain |
 
@@ -62,7 +62,8 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
     │   └── AuthContext.js   # Auth provider + useAuth() hook
     └── lib/
         ├── api.js           # Backend API client (register/login/me)
-        └── data.js          # Static content (zodiac, services, astrologers, navLinks)
+        ├── data.js          # Static content (zodiac, services, astrologers, navLinks)
+        └── wikipedia.js     # getWikiSummary() — placeholder content for service pages
 ```
 
 ### Components (`src/components/`)
@@ -83,6 +84,7 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `PageHero.js` | server | Inner-page hero band (breadcrumb + title) |
 | `AuthForm.js` | client | Shared login/register form (`mode` prop); uses `useAuth` + redirects |
 | `ContactForm.js` | client | Contact page form (demo, no backend yet) |
+| `InfoPage.js` | server (async) | Reusable service page; fetches Wikipedia placeholder content |
 
 ---
 
@@ -96,6 +98,10 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `/disclaimer` | `app/disclaimer/page.js` | Legal disclaimer |
 | `/login` | `app/login/page.js` | `<AuthForm mode="login" />` |
 | `/register` | `app/register/page.js` | `<AuthForm mode="register" />` |
+| `/kundli` | `app/kundli/page.js` | **Free Kundli** — login-gated; shows chart + AI prediction |
+| `/horoscope` `/kundli-matching` `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
+| `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + Wikipedia info |
+| `/careers` | `app/careers/page.js` | Static careers listing |
 
 > Header/Footer mein kuch links (`/kundli`, `/horoscope`, `/panchang`…) abhi
 > **placeholder** hain — pages baad mein banenge.
@@ -114,6 +120,11 @@ CSS variables `:root` mein hain; Tailwind v4 `@theme inline` unhe utility banata
 Key tokens: `--night-900..600` (bg ramp), `--gold-400/500/600` (accent = red ramp),
 `--violet-*`, `--rose-500`, `--ink` / `--ink-dim` (text).
 
+**Typography:** `--font-base` (global size knob, default `100%`=16px — rem scales from it),
+`--leading-body` (1.6, comfortable reading), `--leading-heading` (1.2). Font-family via
+`--font-poppins` (body = `astro_swap_text_regular`) / `--font-playfair`
+(headings = `astro_swap_headline_regular`), self-hosted `@font-face` in `globals.css`.
+
 Helper classes: `.container-x`, `.glass`, `.card-hover`, `.btn-gold`, `.gold-text`, `.font-display`.
 
 Animations (hand-tuned keyframes): `spin-slow`/`spin-reverse`, `float-y`, `fade-up`,
@@ -125,7 +136,9 @@ Animations (hand-tuned keyframes): `spin-slow`/`spin-reverse`, `float-y`, `fade-
 
 Flow: `AuthForm` → `useAuth()` → `api.js` → backend → token localStorage → header updates.
 
-- **`lib/api.js`** — `apiRegister`, `apiLogin`, `apiMe`. Base URL `NEXT_PUBLIC_API_URL`.
+- **`lib/api.js`** — `apiRegister`, `apiLogin`, `apiMe`, `apiPredictBasic(token)`,
+  `apiPredictHistory(token)`, `apiPanchang(params)` (public), `apiChart(payload)` (public,
+  compute-only). Base URL `NEXT_PUBLIC_API_URL`.
   `ApiError` class status + field-errors carry karti hai. Network fail pe friendly message.
 - **`context/AuthContext.js`** — `AuthProvider` (layout mein wrapped). State: `user`,
   `token`, `loading`. Mount pe localStorage se token restore karke `/me` se verify karta hai.
@@ -173,15 +186,17 @@ npm run build && npm start   # production
 |---------|--------|-------|
 | Animated cosmic background | ✅ Done | Canvas, mobile-optimized |
 | Homepage (hero, services, zodiac, astrologers, panchang, CTA) | ✅ Done | |
-| Free-kundli form (moon sign) | ✅ Done | Demo calc (birth date se) |
+| Free-kundli form (homepage Hero) | ✅ Done | **Real-time** — `POST /api/chart` se actual Moon/Sun/Lagna/nakshatra (login nahi chahiye) |
 | Daily horoscope (12 signs) | ✅ Done | Deterministic demo readings |
 | About / Contact / Disclaimer pages | ✅ Done | Tailwind + MUI icons |
 | Red/crimson theme | ✅ Done | Token-based |
 | Responsive + mobile hamburger | ✅ Done | |
 | **Login / Register (API-integrated)** | ✅ Done | JWT, AuthContext, header state |
 | **Register captures birth details + phone** | ✅ Done | gender, DOB, time, place, phone → basic prediction base |
+| **Free Kundli page (`/kundli`)** | ✅ Done | login-gated; real chart + AI prediction, history-first (cost-aware), regenerate |
+| **Panchang — real-time** | ✅ Done | homepage fetches live `/api/panchang` (was hardcoded) |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
-| Sub-pages (kundli, matching, panchang, tarot…) | ⏳ Planned | Header links placeholder |
+| Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | **Wikipedia** placeholder content (`InfoPage`) — apni API se replace hoga |
 | Protected pages / user dashboard | ⏳ Planned | "My Kundli", saved charts |
 | Talk-to-astrologer (chat/call) | ⏳ Planned | |
 | Forgot password UI | ⏳ Planned | backend ready hone pe |

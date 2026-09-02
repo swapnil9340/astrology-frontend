@@ -44,3 +44,19 @@ export const apiLogin = (payload) =>
   request("/api/auth/login", { method: "POST", body: payload });
 
 export const apiMe = (token) => request("/api/auth/me", { token });
+
+export const apiPredictBasic = (token) =>
+  request("/api/predict/basic", { method: "POST", token });
+
+export const apiPredictHistory = (token) =>
+  request("/api/predict/history", { token });
+
+export const apiChart = (payload) =>
+  request("/api/chart", { method: "POST", body: payload });
+
+export const apiPanchang = (params = {}) => {
+  const qs = new URLSearchParams(
+    Object.entries(params).filter(([, v]) => v != null && v !== "")
+  ).toString();
+  return request(`/api/panchang${qs ? `?${qs}` : ""}`);
+};
