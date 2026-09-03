@@ -13,6 +13,7 @@ export default async function InfoPage({
   subtitle,
   wikiTitle,
   cta = {},
+  hideImage = false,
   children,
 }) {
   const wiki = await getWikiSummary(wikiTitle);
@@ -36,7 +37,7 @@ export default async function InfoPage({
         <div className="glass rounded-[22px] p-7 max-w-[820px] mx-auto mt-2">
           {wiki ? (
             <>
-              {wiki.image && (
+              {wiki.image && !hideImage && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={wiki.image}

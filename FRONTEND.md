@@ -63,6 +63,7 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
     └── lib/
         ├── api.js           # Backend API client (register/login/me)
         ├── data.js          # Static content (zodiac, services, astrologers, navLinks)
+        ├── rashifal.js      # static daily rashifal (fallback for AI)
         └── wikipedia.js     # getWikiSummary() — placeholder content for service pages
 ```
 
@@ -85,6 +86,7 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `AuthForm.js` | client | Shared login/register form (`mode` prop); uses `useAuth` + redirects |
 | `ContactForm.js` | client | Contact page form (demo, no backend yet) |
 | `InfoPage.js` | server (async) | Reusable service page; fetches Wikipedia placeholder content |
+| `RashifalView.js` | client | Fetches today's AI rashifal (`/api/rashifal`), static fallback; used by `/horoscope/[sign]` |
 
 ---
 
@@ -99,7 +101,9 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `/login` | `app/login/page.js` | `<AuthForm mode="login" />` |
 | `/register` | `app/register/page.js` | `<AuthForm mode="register" />` |
 | `/kundli` | `app/kundli/page.js` | **Free Kundli** — login-gated; shows chart + AI prediction |
-| `/horoscope` `/kundli-matching` `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
+| `/horoscope` | `app/horoscope/page.js` | 12-sign grid → per-sign rashifal |
+| `/horoscope/[sign]` | `app/horoscope/[sign]/page.js` | **AI daily rashifal** (free, no login) via `RashifalView` |
+| `/kundli-matching` `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
 | `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + Wikipedia info |
 | `/careers` | `app/careers/page.js` | Static careers listing |
 | `/pricing` | `app/pricing/page.js` | Subscription plans (free/silver/gold/platinum) from `/api/plans` |
@@ -192,7 +196,7 @@ npm run build && npm start   # production
 | Animated cosmic background | ✅ Done | Canvas, mobile-optimized |
 | Homepage (hero, services, zodiac, astrologers, panchang, CTA) | ✅ Done | |
 | Free-kundli form (homepage Hero) | ✅ Done | **Real-time** — `POST /api/chart` se actual Moon/Sun/Lagna/nakshatra (login nahi chahiye) |
-| Daily horoscope (12 signs) | ✅ Done | Deterministic demo readings |
+| Daily horoscope (12 signs) | ✅ Done | Homepage section + `/horoscope/[sign]` use **live AI rashifal** (`/api/rashifal`), free/no-login, static fallback |
 | About / Contact / Disclaimer pages | ✅ Done | Tailwind + MUI icons |
 | Red/crimson theme | ✅ Done | Token-based |
 | Responsive + mobile hamburger | ✅ Done | |

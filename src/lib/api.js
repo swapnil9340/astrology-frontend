@@ -72,6 +72,9 @@ export const apiChart = (payload) =>
 
 export const apiPlans = () => request("/api/plans");
 
+export const apiRashifal = (sign, lang = "en") =>
+  request(`/api/rashifal/${encodeURIComponent(sign)}?lang=${lang}`);
+
 export const apiCreateOrder = (token, payload) =>
   request("/api/payment/order", { method: "POST", token, body: payload });
 

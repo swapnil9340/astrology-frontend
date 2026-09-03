@@ -7,14 +7,38 @@ import CloseIcon from "@mui/icons-material/Close";
 import ChatBubbleOutlineIcon from "@mui/icons-material/Chat";
 import PersonOutlineIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
+import TranslateIcon from "@mui/icons-material/Translate";
 import { navLinks } from "@/lib/data";
 import { useAuth } from "@/context/AuthContext";
+import { useLang } from "@/context/LanguageContext";
+
+const NAV_KEY = {
+  "/horoscope": "nav.horoscope",
+  "/kundli": "nav.kundli",
+  "/kundli-matching": "nav.matching",
+  "/panchang": "nav.panchang",
+  "/pricing": "nav.pricing",
+  "/#astrologers": "nav.astrologers",
+};
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, logout, loading } = useAuth();
+  const { t, lang, toggle } = useLang();
   const firstName = user?.name?.split(" ")[0];
+  const navLabel = (l) => (NAV_KEY[l.href] ? t(NAV_KEY[l.href]) : l.label);
+
+  const LangToggle = ({ className = "" }) => (
+    <button
+      onClick={toggle}
+      aria-label="Switch language"
+      title={lang === "en" ? "हिंदी" : "English"}
+      className={`grid place-items-center h-11 px-3 rounded-[10px] border border-white/10 text-ink bg-white/5 inline-flex items-center gap-1 text-sm active:scale-95 transition-transform ${className}`}
+    >
+      <TranslateIcon sx={{ fontSize: 18 }} /> {lang === "en" ? "हिं" : "EN"}
+    </button>
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -55,7 +79,7 @@ export default function Header() {
               href={l.href}
               className="text-ink-dim hover:text-gold-400 hover:bg-white/5 no-underline px-3 py-2 text-[15px] rounded-lg transition-colors"
             >
-              {l.label}
+              {navLabel(l)}
             </Link>
           ))}
         </nav>
@@ -83,7 +107,7 @@ export default function Header() {
                 href="/login"
                 className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-[9px] rounded-full no-underline text-sm text-ink border border-white/15 hover:border-gold-500/50 hover:text-gold-400 transition-colors"
               >
-                <PersonOutlineIcon sx={{ fontSize: 16 }} /> Sign in
+                <PersonOutlineIcon sx={{ fontSize: 16 }} /> {t("nav.signin")}
               </Link>
             )
           )}
@@ -92,8 +116,11 @@ export default function Header() {
             href="/#astrologers"
             className="btn-gold hidden md:inline-flex items-center gap-1.5 px-[18px] py-[9px] rounded-full no-underline text-sm"
           >
-            <ChatBubbleOutlineIcon sx={{ fontSize: 16 }} /> Talk to Astrologer
+            <ChatBubbleOutlineIcon sx={{ fontSize: 16 }} /> {t("nav.talk")}
           </Link>
+
+          {/* Language toggle — desktop (beside auth) & mobile (beside hamburger) */}
+          <LangToggle />
 
           {/* Hamburger — visible below lg */}
           <button
@@ -121,7 +148,7 @@ export default function Header() {
               onClick={() => setOpen(false)}
               className="text-ink no-underline px-2 py-3 rounded-lg border-b border-white/10 hover:bg-white/5"
             >
-              {l.label}
+              {navLabel(l)}
             </Link>
           ))}
           <Link
@@ -129,7 +156,7 @@ export default function Header() {
             onClick={() => setOpen(false)}
             className="btn-gold inline-flex items-center justify-center gap-1.5 text-center px-3 py-3 rounded-full no-underline mt-2"
           >
-            <ChatBubbleOutlineIcon sx={{ fontSize: 18 }} /> Talk to Astrologer
+            <ChatBubbleOutlineIcon sx={{ fontSize: 18 }} /> {t("nav.talk")}
           </Link>
 
           {/* Auth (mobile) */}
@@ -138,13 +165,13 @@ export default function Header() {
               <div className="mt-2 grid gap-2">
                 <span className="inline-flex items-center gap-2 text-ink text-sm px-2">
                   <PersonOutlineIcon sx={{ fontSize: 18 }} className="text-gold-400" />
-                  Signed in as {firstName}
+                  {t("nav.signedInAs")} {firstName}
                 </span>
                 <button
                   onClick={() => { logout(); setOpen(false); }}
                   className="inline-flex items-center justify-center gap-1.5 px-3 py-3 rounded-full border border-white/15 text-ink hover:text-rose-500 hover:border-rose-500/40 transition-colors"
                 >
-                  <LogoutIcon sx={{ fontSize: 18 }} /> Log out
+                  <LogoutIcon sx={{ fontSize: 18 }} /> {t("nav.logout")}
                 </button>
               </div>
             ) : (
@@ -154,14 +181,14 @@ export default function Header() {
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-center gap-1.5 px-3 py-3 rounded-full border border-white/15 text-ink no-underline hover:border-gold-500/50"
                 >
-                  <PersonOutlineIcon sx={{ fontSize: 18 }} /> Sign in
+                  <PersonOutlineIcon sx={{ fontSize: 18 }} /> {t("nav.signin")}
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-center px-3 py-3 rounded-full text-ink no-underline bg-white/5 hover:bg-white/10"
                 >
-                  Register
+                  {t("nav.register")}
                 </Link>
               </div>
             )

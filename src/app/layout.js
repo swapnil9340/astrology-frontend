@@ -1,6 +1,7 @@
 import "./globals.css";
 import StarfieldBackground from "@/components/StarfieldBackground";
 import ThemeRegistry from "@/components/ThemeRegistry";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,14 +21,16 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ThemeRegistry>
-          <AuthProvider>
-            <StarfieldBackground />
-            <div className="relative z-[1]">
-              <Header />
-              <main>{children}</main>
-              <Footer />
-            </div>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <StarfieldBackground />
+              <div className="relative z-[1]">
+                <Header />
+                <main>{children}</main>
+                <Footer />
+              </div>
+            </AuthProvider>
+          </LanguageProvider>
         </ThemeRegistry>
       </body>
     </html>

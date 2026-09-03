@@ -13,6 +13,7 @@ export default function PanchangPage() {
       title="Panchang"
       subtitle="Aaj ka live Panchang — tithi, nakshatra, muhurat aur zyada."
       wikiTitle="Panchangam"
+      hideImage
       cta={{ note: "Apni kundli ke saath personalised muhurat jald.", href: "/kundli", label: "Get your Free Kundli" }}
     >
       {/* live real-time panchang */}
