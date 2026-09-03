@@ -1,4 +1,9 @@
+"use client";
+
+import { useLang } from "@/context/LanguageContext";
+
 export default function CtaBanner() {
+  const { t } = useLang();
   return (
     <section style={{ paddingBlock: 40 }}>
       <div className="container-x">
@@ -18,15 +23,14 @@ export default function CtaBanner() {
           <div style={{ position: "relative" }}>
             <div className="float-y" style={{ fontSize: 46 }}>🌙</div>
             <h2 className="font-display" style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 700, margin: "10px 0 12px" }}>
-              Carry the cosmos in your pocket
+              {t("cta.title")}
             </h2>
             <p style={{ color: "var(--ink-dim)", fontSize: 17, maxWidth: 540, margin: "0 auto 26px", lineHeight: 1.6 }}>
-              Download the AstroVeda app for daily predictions, instant kundli and
-              1-tap chat with astrologers — free forever.
+              {t("cta.subtitle")}
             </p>
             <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
               <button className="btn-gold" style={{ padding: "13px 26px", borderRadius: 999, border: "none", cursor: "pointer", fontSize: 15 }}>
-                 App Store
+                {t("cta.appstore")}
               </button>
               <button
                 style={{
@@ -39,7 +43,7 @@ export default function CtaBanner() {
                   color: "var(--ink)",
                 }}
               >
-                ▶ Google Play
+                {t("cta.play")}
               </button>
             </div>
           </div>

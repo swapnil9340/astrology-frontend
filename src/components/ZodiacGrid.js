@@ -6,8 +6,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { zodiacSigns, horoscopeFor } from "@/lib/data";
 import SectionHeading from "./SectionHeading";
 import { apiRashifal } from "@/lib/api";
+import { useLang } from "@/context/LanguageContext";
 
 export default function ZodiacGrid() {
+  const { t } = useLang();
   const [active, setActive] = useState(zodiacSigns[0]);
   const [ai, setAi] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -75,9 +77,9 @@ export default function ZodiacGrid() {
     <section id="horoscope" style={{ paddingBlock: 60 }}>
       <div className="container-x">
         <SectionHeading
-          eyebrow="Today's Rashifal"
-          title="Your daily horoscope"
-          subtitle="Apni rashi pe tap karo — aaj ka AI rashifal (free, bina login)."
+          eyebrow={t("horo.eyebrow")}
+          title={t("horo.title")}
+          subtitle={t("horo.subtitle")}
         />
 
         <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 28, alignItems: "start" }} className="zodiac-wrap">

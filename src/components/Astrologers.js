@@ -1,7 +1,11 @@
+"use client";
+
 import { astrologers } from "@/lib/data";
 import SectionHeading from "./SectionHeading";
+import { useLang } from "@/context/LanguageContext";
 
 export default function Astrologers() {
+  const { t } = useLang();
   // duplicate list so the marquee can loop seamlessly
   const loop = [...astrologers, ...astrologers];
 
@@ -9,9 +13,9 @@ export default function Astrologers() {
     <section id="astrologers" style={{ paddingBlock: 60 }}>
       <div className="container-x">
         <SectionHeading
-          eyebrow="Live now"
-          title="Talk to expert astrologers"
-          subtitle="Real, verified astrologers ready to guide you over chat or call — anytime."
+          eyebrow={t("astro.eyebrow")}
+          title={t("astro.title")}
+          subtitle={t("astro.subtitle")}
         />
       </div>
 
@@ -61,7 +65,7 @@ export default function Astrologers() {
 
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16, fontSize: 13, color: "var(--ink-dim)" }}>
                 <span>⭐ {a.rating}</span>
-                <span>{a.exp} exp</span>
+                <span>{a.exp} {t("astro.exp")}</span>
               </div>
               <div style={{ color: "var(--ink-dim)", fontSize: 12, marginTop: 6 }}>{a.lang}</div>
 
@@ -71,7 +75,7 @@ export default function Astrologers() {
                   className="btn-gold"
                   style={{ padding: "8px 16px", borderRadius: 999, border: "none", cursor: "pointer", fontSize: 13 }}
                 >
-                  {a.online ? "Chat now" : "Notify me"}
+                  {a.online ? t("astro.chat") : t("astro.notify")}
                 </button>
               </div>
             </article>

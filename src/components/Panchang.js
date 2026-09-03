@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import SectionHeading from "./SectionHeading";
 import { apiPanchang } from "@/lib/api";
+import { useLang } from "@/context/LanguageContext";
 
 const LABELS = [
   ["Tithi", "tithi"],
@@ -17,6 +18,7 @@ const LABELS = [
 ];
 
 export default function Panchang() {
+  const { t } = useLang();
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
 
@@ -41,7 +43,7 @@ export default function Panchang() {
           {/* rotating mandala accent */}
           <div aria-hidden className="spin-reverse absolute -left-20 -bottom-20 w-[220px] h-[220px] rounded-full border border-dashed border-rose-500/30" />
 
-          <SectionHeading center={false} eyebrow="Aaj ka Panchang" title="Today's Panchang" subtitle={subtitle} />
+          <SectionHeading center={false} eyebrow={t("panchang.eyebrow")} title={t("panchang.title")} subtitle={subtitle} />
 
           <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3.5">
             {LABELS.map(([label, key]) => (
