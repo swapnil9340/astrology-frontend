@@ -208,6 +208,7 @@ npm run build && npm start   # production
 | **Payments (Razorpay)** | ✅ Done | pack buy (paywall) + plan subscribe (pricing); verify → credits/subscription; `refreshUser()` |
 | Print/PDF · talk-to-pandit | ⏳ Planned | see PROJECT_PLAN monetization |
 | **Panchang — real-time** | ✅ Done | homepage fetches live `/api/panchang` (was hardcoded) |
+| **SEO Phase 1** | ✅ Done | `app/sitemap.js` (data-driven), `app/robots.js`, root metadata (OG/Twitter/canonical/keywords), noindex login/register. `lib/site.js` = `SITE_URL`. See `AstroVeda_SEO_Plan.xlsx` |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
 | Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | **Wikipedia** placeholder content (`InfoPage`) — apni API se replace hoga |
 | Protected pages / user dashboard | ⏳ Planned | "My Kundli", saved charts |
