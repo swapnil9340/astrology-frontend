@@ -12,13 +12,15 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import MoodIcon from "@mui/icons-material/Mood";
 import { apiRashifal } from "@/lib/api";
 import { getRashifal } from "@/lib/rashifal";
+import { useLang } from "@/context/LanguageContext";
 
 export default function RashifalView({ slug }) {
+  const { lang } = useLang();
   const [state, setState] = useState({ status: "loading", data: null, source: "" });
 
   useEffect(() => {
     let active = true;
-    apiRashifal(slug)
+    apiRashifal(slug, lang)
       .then((res) => active && setState({ status: "done", data: res.rashifal, source: res.source }))
       .catch(() => {
         // fallback to static content so the page is never empty
@@ -26,7 +28,7 @@ export default function RashifalView({ slug }) {
         if (active) setState({ status: fb ? "done" : "error", data: fb, source: "static" });
       });
     return () => { active = false; };
-  }, [slug]);
+  }, [slug, lang]);
 
   if (state.status === "loading") {
     return (

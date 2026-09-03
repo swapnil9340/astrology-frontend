@@ -9,7 +9,7 @@ import { apiRashifal } from "@/lib/api";
 import { useLang } from "@/context/LanguageContext";
 
 export default function ZodiacGrid() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [active, setActive] = useState(zodiacSigns[0]);
   const [ai, setAi] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,14 +18,15 @@ export default function ZodiacGrid() {
   // Free, no login — fetch today's AI rashifal for the selected sign.
   useEffect(() => {
     const slug = active.name.toLowerCase();
-    if (cache.current[slug]) { setAi(cache.current[slug]); return; }
+    const key = `${slug}:${lang}`;
+    if (cache.current[key]) { setAi(cache.current[key]); return; }
     setAi(null);
     let live = true;
-    apiRashifal(slug)
-      .then((res) => { if (!live) return; cache.current[slug] = res.rashifal; setAi(res.rashifal); })
+    apiRashifal(slug, lang)
+      .then((res) => { if (!live) return; cache.current[key] = res.rashifal; setAi(res.rashifal); })
       .catch(() => {});
     return () => { live = false; };
-  }, [active]);
+  }, [active, lang]);
 
   // Lock body scroll while the mobile modal is open.
   useEffect(() => {
