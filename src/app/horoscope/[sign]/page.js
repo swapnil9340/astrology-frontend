@@ -15,10 +15,17 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { sign } = await params;
   const z = findSign(sign);
-  if (!z) return { title: "Rashifal — AstroVeda" };
+  if (!z) return { title: "Rashifal — AstroVedji" };
+  const n = z.name;
   return {
-    title: `${z.name} Daily Horoscope — AstroVeda`,
-    description: `Aaj ka ${z.name} (${z.hindi}) rashifal — love, career, health, lucky number & more.`,
+    title: `${n} Daily Horoscope Today — AstroVedji`,
+    description: `Aaj ka ${n} (${z.hindi}) rashifal — love, career, health, lucky number & color.`,
+    keywords: [
+      `${n} horoscope today`, `${n} daily horoscope`, `${n} horoscope`, `${n} rashifal`,
+      `${z.hindi} rashifal`, `aaj ka ${n} rashifal`, `${n} love horoscope`, `${n} career horoscope`,
+      "daily horoscope", "rashifal",
+    ],
+    alternates: { canonical: `/horoscope/${n.toLowerCase()}` },
   };
 }
 

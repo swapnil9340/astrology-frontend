@@ -4,15 +4,15 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PageHero from "@/components/PageHero";
 
 export const metadata = {
-  title: "Disclaimer — AstroVeda",
+  title: "Disclaimer — AstroVedji",
   description:
-    "Read the AstroVeda disclaimer regarding the use of astrology content, predictions, remedies and consultations provided on this website.",
+    "Read the AstroVedji disclaimer regarding the use of astrology content, predictions, remedies and consultations provided on this website.",
 };
 
 const sections = [
   {
     heading: "For guidance, not certainty",
-    body: "The horoscopes, kundli reports, predictions, remedies and other astrological content on AstroVeda are provided for informational and entertainment purposes only. Astrology is a belief system and is not recognised as a science. Nothing here should be treated as a guaranteed outcome.",
+    body: "The horoscopes, kundli reports, predictions, remedies and other astrological content on AstroVedji are provided for informational and entertainment purposes only. Astrology is a belief system and is not recognised as a science. Nothing here should be treated as a guaranteed outcome.",
   },
   {
     heading: "Not professional advice",
@@ -20,7 +20,7 @@ const sections = [
   },
   {
     heading: "Your decisions are your own",
-    body: "Any action you take based on the information found on this website is strictly at your own risk. AstroVeda and its astrologers will not be liable for any losses or damages arising from the use of our tools, reports or consultations.",
+    body: "Any action you take based on the information found on this website is strictly at your own risk. AstroVedji and its astrologers will not be liable for any losses or damages arising from the use of our tools, reports or consultations.",
   },
   {
     heading: "Accuracy of calculations",
@@ -28,7 +28,7 @@ const sections = [
   },
   {
     heading: "Third-party astrologers",
-    body: "Consultations are offered by independent, verified astrologers. The views and remedies they share are their own. AstroVeda acts only as a platform connecting you with them and does not endorse any specific prediction or remedy.",
+    body: "Consultations are offered by independent, verified astrologers. The views and remedies they share are their own. AstroVedji acts only as a platform connecting you with them and does not endorse any specific prediction or remedy.",
   },
   {
     heading: "External links",
@@ -43,7 +43,7 @@ export default function DisclaimerPage() {
         emoji="⚖️"
         breadcrumb={<><Link href="/" className="text-gold-400 no-underline hover:underline">Home</Link> / Disclaimer</>}
         title="Disclaimer"
-        subtitle="Please read this carefully before using AstroVeda's astrology tools, reports and consultations."
+        subtitle="Please read this carefully before using AstroVedji's astrology tools, reports and consultations."
       />
 
       <div className="container-x pb-5">

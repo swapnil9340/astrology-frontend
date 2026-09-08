@@ -1,4 +1,4 @@
-# AstroVeda — Frontend Documentation
+# AstroVedji — Frontend Documentation
 
 > **Living document.** Har naya frontend feature yahan add karte jao. Ye file
 > akela padh ke koi bhi (AI ya insaan) poora frontend samajh sakta hai.
@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-AstroVeda ka **web frontend** — ek Vedic-astrology portal (AstroSage jaisa):
+AstroVedji ka **web frontend** — ek Vedic-astrology portal (AstroSage jaisa):
 animated cosmic homepage, free-kundli form, daily horoscope, astrologers,
 panchang, aur **user authentication** (login/register).
 
@@ -103,7 +103,8 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `/kundli` | `app/kundli/page.js` | **Free Kundli** — login-gated; shows chart + AI prediction |
 | `/horoscope` | `app/horoscope/page.js` | 12-sign grid → per-sign rashifal |
 | `/horoscope/[sign]` | `app/horoscope/[sign]/page.js` | **AI daily rashifal** (free, no login) via `RashifalView` |
-| `/kundli-matching` `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
+| `/kundli-matching` | `app/kundli-matching/page.js` | **Kundli Milan** — 2-person form → Divine API PDF report (`MatchMaking`, login-gated) |
+| `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
 | `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + Wikipedia info |
 | `/careers` | `app/careers/page.js` | Static careers listing |
 | `/pricing` | `app/pricing/page.js` | Subscription plans (free/silver/gold/platinum) from `/api/plans` |
@@ -204,10 +205,12 @@ npm run build && npm start   # production
 | **Register captures birth details + phone** | ✅ Done | gender, DOB, time, place, phone → basic prediction base |
 | **Free Kundli page (`/kundli`)** | ✅ Done | login-gated; real chart + AI prediction, history-first (cost-aware), regenerate |
 | **Free-3 limit + paywall** | ✅ Done | 3 free kundlis; 402 pe paywall card (₹100=10, pack "coming soon") |
+| **Kundli Matching (Divine API)** | ✅ Done | `/kundli-matching` 2-person form → `apiMatch` → Divine PDF report in iframe (login-gated) |
 | **Subscription plans page (`/pricing`)** | ✅ Done | plans + **live Razorpay subscribe** |
 | **Payments (Razorpay)** | ✅ Done | pack buy (paywall) + plan subscribe (pricing); verify → credits/subscription; `refreshUser()` |
 | Print/PDF · talk-to-pandit | ⏳ Planned | see PROJECT_PLAN monetization |
 | **Panchang — real-time** | ✅ Done | homepage fetches live `/api/panchang` (was hardcoded) |
+| **SEO Phase 1** | ✅ Done | `app/sitemap.js` (data-driven), `app/robots.js`, root metadata (OG/Twitter/canonical/keywords), noindex login/register. `lib/site.js` = `SITE_URL`. See `AstroVedji_SEO_Plan.xlsx` |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
 | Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | **Wikipedia** placeholder content (`InfoPage`) — apni API se replace hoga |
 | Protected pages / user dashboard | ⏳ Planned | "My Kundli", saved charts |

@@ -1,4 +1,4 @@
-// Thin client for the AstroVeda backend auth API.
+// Thin client for the AstroVedji backend auth API.
 
 function resolveApiUrl() {
   let url = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").trim();
@@ -74,6 +74,9 @@ export const apiPlans = () => request("/api/plans");
 
 export const apiRashifal = (sign, lang = "en") =>
   request(`/api/rashifal/${encodeURIComponent(sign)}?lang=${lang}`);
+
+export const apiMatch = (token, payload) =>
+  request("/api/match", { method: "POST", token, body: payload });
 
 export const apiCreateOrder = (token, payload) =>
   request("/api/payment/order", { method: "POST", token, body: payload });

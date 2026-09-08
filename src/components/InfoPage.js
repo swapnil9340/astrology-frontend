@@ -53,7 +53,7 @@ export default async function InfoPage({
 
           <div className="mt-6 border-t border-white/10 pt-5 text-center clear-both">
             <p className="text-ink-dim text-sm mb-3">
-              {cta.note || "AstroVeda ki apni detailed service jald aa rahi hai."}
+              {cta.note || "AstroVedji ki apni detailed service jald aa rahi hai."}
             </p>
             <Link
               href={cta.href || "/kundli"}

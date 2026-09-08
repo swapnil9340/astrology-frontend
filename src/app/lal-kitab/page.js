@@ -1,8 +1,12 @@
 import InfoPage from "@/components/InfoPage";
 
 export const metadata = {
-  title: "Lal Kitab — AstroVeda",
-  description: "Simple, powerful remedies from the legendary Lal Kitab tradition.",
+  title: "Lal Kitab Remedies & Astrology | AstroVedji",
+  description: "Simple, powerful remedies (upay) from the legendary Lal Kitab tradition.",
+  keywords: [
+    "lal kitab", "lal kitab remedies", "lal kitab upay", "lal kitab astrology",
+    "लाल किताब", "लाल किताब उपाय",
+  ],
 };
 
 export default function LalKitabPage() {
