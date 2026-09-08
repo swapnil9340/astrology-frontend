@@ -31,7 +31,7 @@ export async function startPayment({ kind, itemId, token, user }) {
       order_id: order.orderId,
       amount: order.amount,
       currency: order.currency,
-      name: "AstroVeda",
+      name: "AstroVedji",
       description: order.name,
       prefill: {
         name: user?.name || "",

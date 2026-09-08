@@ -67,7 +67,7 @@ export default function Header() {
           </span>
           <span className="font-display text-[22px] sm:text-2xl font-bold">
             <span className="text-ink">Astro</span>
-            <span className="gold-text">Veda</span>
+            <span className="gold-text">Vedji</span>
           </span>
         </Link>
 

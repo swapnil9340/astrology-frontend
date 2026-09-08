@@ -3,7 +3,7 @@ import PageHero from "@/components/PageHero";
 import { zodiacSigns } from "@/lib/data";
 
 export const metadata = {
-  title: "Daily Horoscope — AstroVeda",
+  title: "Daily Horoscope — AstroVedji",
   description: "Aaj ka rashifal — apni rashi chuno aur AI-powered daily horoscope padho.",
   keywords: [
     "daily horoscope", "today horoscope", "aaj ka rashifal", "rashifal", "दैनिक राशिफल",

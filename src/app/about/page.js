@@ -7,9 +7,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PageHero from "@/components/PageHero";
 
 export const metadata = {
-  title: "About Us — AstroVeda",
+  title: "About Us — AstroVedji",
   description:
-    "AstroVeda blends authentic Vedic astrology with modern technology to bring you free kundli, honest horoscopes and trusted astrologer consultations.",
+    "AstroVedji blends authentic Vedic astrology with modern technology to bring you free kundli, honest horoscopes and trusted astrologer consultations.",
 };
 
 const values = [
@@ -33,7 +33,7 @@ export default function AboutPage() {
         emoji="🔯"
         breadcrumb={<><Link href="/" className="text-gold-400 no-underline hover:underline">Home</Link> / About Us</>}
         title="Guided by the stars, grounded in tradition"
-        subtitle="AstroVeda is where centuries-old Vedic wisdom meets modern technology — helping millions find clarity, one chart at a time."
+        subtitle="AstroVedji is where centuries-old Vedic wisdom meets modern technology — helping millions find clarity, one chart at a time."
       />
 
       <div className="container-x pb-5">
@@ -41,7 +41,7 @@ export default function AboutPage() {
         <div className="glass rounded-[22px] px-[30px] py-[34px] mb-10">
           <h2 className="font-display gold-text text-[26px] mt-0">Our Story</h2>
           <p className="text-ink-dim text-base leading-8">
-            AstroVeda began with a simple belief — that the timeless knowledge of Jyotish should be
+            AstroVedji began with a simple belief — that the timeless knowledge of Jyotish should be
             available to everyone, not locked away in dusty manuscripts or expensive consultations.
             What started as a small circle of astrologers and engineers has grown into a trusted
             platform serving millions of seekers across the world.

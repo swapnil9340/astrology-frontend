@@ -2,7 +2,7 @@ import InfoPage from "@/components/InfoPage";
 import Panchang from "@/components/Panchang";
 
 export const metadata = {
-  title: "Aaj ka Panchang — Tithi, Nakshatra, Muhurat | AstroVeda",
+  title: "Aaj ka Panchang — Tithi, Nakshatra, Muhurat | AstroVedji",
   description: "Today's real-time Panchang — tithi, nakshatra, yoga, karana, sunrise, sunset, rahu kaal & shubh muhurat.",
   keywords: [
     "panchang", "aaj ka panchang", "today panchang", "rahu kaal", "shubh muhurat",

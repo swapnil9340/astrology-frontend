@@ -49,7 +49,7 @@ export default function Footer() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <span style={{ fontSize: 26 }}>🔯</span>
               <span className="font-display" style={{ fontSize: 24, fontWeight: 700 }}>
-                Astro<span className="gold-text">Veda</span>
+                Astro<span className="gold-text">Vedji</span>
               </span>
             </div>
             <p style={{ color: "var(--ink-dim)", fontSize: 14, lineHeight: 1.7, maxWidth: 260 }}>
@@ -95,7 +95,7 @@ export default function Footer() {
             fontSize: 13,
           }}
         >
-          <span>© {new Date().getFullYear()} AstroVeda. {t("foot.rights")}</span>
+          <span>© {new Date().getFullYear()} AstroVedji. {t("foot.rights")}</span>
           <span>Made with ✨ &nbsp;•&nbsp; Privacy · Terms</span>
         </div>
       </div>

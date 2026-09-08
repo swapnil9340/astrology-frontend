@@ -1,7 +1,7 @@
 import InfoPage from "@/components/InfoPage";
 
 export const metadata = {
-  title: "Palmistry — Palm Reading | AstroVeda",
+  title: "Palmistry — Palm Reading | AstroVedji",
   description: "Read the lines of your palm (hast rekha) to understand your life's path.",
   keywords: [
     "palmistry", "palm reading", "hast rekha", "hand reading", "हस्तरेखा", "हाथ की रेखा",

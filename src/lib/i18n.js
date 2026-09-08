@@ -52,7 +52,7 @@ export const translations = {
     "panchang.eyebrow": "Aaj ka Panchang",
     "panchang.title": "Today's Panchang",
     "cta.title": "Carry the cosmos in your pocket",
-    "cta.subtitle": "Download the AstroVeda app for daily predictions, instant kundli and 1-tap chat with astrologers — free forever.",
+    "cta.subtitle": "Download the AstroVedji app for daily predictions, instant kundli and 1-tap chat with astrologers — free forever.",
     "cta.appstore": " App Store",
     "cta.play": "▶ Google Play",
 
@@ -143,7 +143,7 @@ export const translations = {
     "panchang.eyebrow": "आज का पंचांग",
     "panchang.title": "आज का पंचांग",
     "cta.title": "ब्रह्मांड को अपनी जेब में रखें",
-    "cta.subtitle": "रोज़ाना भविष्यवाणी, तुरंत कुंडली और ज्योतिषी से 1-टैप चैट के लिए AstroVeda ऐप डाउनलोड करें — हमेशा फ्री।",
+    "cta.subtitle": "रोज़ाना भविष्यवाणी, तुरंत कुंडली और ज्योतिषी से 1-टैप चैट के लिए AstroVedji ऐप डाउनलोड करें — हमेशा फ्री।",
     "cta.appstore": " App Store",
     "cta.play": "▶ Google Play",
 

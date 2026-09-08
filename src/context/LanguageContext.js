@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { translate } from "@/lib/i18n";
 
-const KEY = "astroveda_lang";
+const KEY = "astrovedji_lang";
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {

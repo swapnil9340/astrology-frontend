@@ -6,7 +6,7 @@ import { CacheProvider } from "@emotion/react";
 import { useServerInsertedHTML } from "next/navigation";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-// Dark MUI theme aligned with the AstroVeda palette (mainly for icon colours).
+// Dark MUI theme aligned with the AstroVedji palette (mainly for icon colours).
 const theme = createTheme({
   palette: {
     mode: "dark",

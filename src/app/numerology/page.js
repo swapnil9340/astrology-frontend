@@ -1,7 +1,7 @@
 import InfoPage from "@/components/InfoPage";
 
 export const metadata = {
-  title: "Numerology Calculator — Life Path Number | AstroVeda",
+  title: "Numerology Calculator — Life Path Number | AstroVedji",
   description: "Discover your life-path and destiny number from your name and birth date. Free numerology reading.",
   keywords: [
     "numerology", "numerology calculator", "life path number", "destiny number",

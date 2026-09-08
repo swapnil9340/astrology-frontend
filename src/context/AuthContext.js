@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import { apiLogin, apiRegister, apiMe } from "@/lib/api";
 
-const STORAGE_KEY = "astroveda_token";
+const STORAGE_KEY = "astrovedji_token";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {

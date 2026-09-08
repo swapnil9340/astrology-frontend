@@ -1,7 +1,7 @@
 import InfoPage from "@/components/InfoPage";
 
 export const metadata = {
-  title: "Astrology Gemstones — Ratna Recommendation | AstroVeda",
+  title: "Astrology Gemstones — Ratna Recommendation | AstroVedji",
   description: "Know which gemstone (ratna) strengthens your planets and changes your fortune, as per Vedic astrology.",
   keywords: [
     "gemstones astrology", "ratna", "navaratna", "lucky gemstone", "birthstone",

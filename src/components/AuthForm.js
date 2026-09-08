@@ -174,7 +174,7 @@ export default function AuthForm({ mode = "login" }) {
           {isRegister ? (
             <>Already have an account? <Link href="/login" className="text-gold-400 no-underline hover:underline">Sign in</Link></>
           ) : (
-            <>New to AstroVeda? <Link href="/register" className="text-gold-400 no-underline hover:underline">Create an account</Link></>
+            <>New to AstroVedji? <Link href="/register" className="text-gold-400 no-underline hover:underline">Create an account</Link></>
           )}
         </p>
       </div>

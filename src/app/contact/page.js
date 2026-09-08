@@ -7,12 +7,12 @@ import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata = {
-  title: "Contact Us — AstroVeda",
-  description: "Get in touch with the AstroVeda team for support, consultations or partnership enquiries.",
+  title: "Contact Us — AstroVedji",
+  description: "Get in touch with the AstroVedji team for support, consultations or partnership enquiries.",
 };
 
 const channels = [
-  { Icon: EmailIcon, label: "Email", value: "support@astroveda.com", note: "We reply within 24 hours" },
+  { Icon: EmailIcon, label: "Email", value: "support@astrovedji.in", note: "We reply within 24 hours" },
   { Icon: CallIcon, label: "Phone", value: "+91 98765 43210", note: "Mon–Sat, 9 AM – 8 PM IST" },
   { Icon: ChatIcon, label: "Live chat", value: "Talk to an astrologer", note: "Available 24×7 in the app" },
   { Icon: PlaceIcon, label: "Office", value: "Jaipur, Rajasthan, India", note: "Visits by appointment" },

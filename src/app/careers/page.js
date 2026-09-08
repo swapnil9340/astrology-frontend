@@ -2,8 +2,8 @@ import Link from "next/link";
 import PageHero from "@/components/PageHero";
 
 export const metadata = {
-  title: "Careers — AstroVeda",
-  description: "Join the AstroVeda team — astrologers, engineers and creators.",
+  title: "Careers — AstroVedji",
+  description: "Join the AstroVedji team — astrologers, engineers and creators.",
 };
 
 const roles = [
@@ -19,7 +19,7 @@ export default function CareersPage() {
         emoji="🚀"
         breadcrumb={<><Link href="/" className="text-gold-400 no-underline hover:underline">Home</Link> / Careers</>}
         title="Work with the stars"
-        subtitle="AstroVeda ko build karne mein saath do — astrologers, engineers aur creators."
+        subtitle="AstroVedji ko build karne mein saath do — astrologers, engineers aur creators."
       />
       <div className="container-x pb-8">
         <div className="grid gap-4 max-w-[760px] mx-auto">

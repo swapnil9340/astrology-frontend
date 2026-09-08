@@ -1,7 +1,7 @@
 import InfoPage from "@/components/InfoPage";
 
 export const metadata = {
-  title: "Free Tarot Card Reading Online | AstroVeda",
+  title: "Free Tarot Card Reading Online | AstroVedji",
   description: "Pick a card for today's tarot guidance on love, career and life. Free online tarot reading.",
   keywords: [
     "tarot reading", "free tarot", "tarot card reading online", "daily tarot",

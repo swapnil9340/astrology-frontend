@@ -10,7 +10,7 @@ import { SITE_URL, SITE_NAME, SITE_DESC } from "@/lib/site";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "AstroVeda — Free Kundli, Horoscope & Talk to Astrologers",
+  title: "AstroVedji — Free Kundli, Horoscope & Talk to Astrologers",
   description: SITE_DESC,
   applicationName: SITE_NAME,
   keywords: [
@@ -31,12 +31,12 @@ export const metadata = {
     type: "website",
     siteName: SITE_NAME,
     url: SITE_URL,
-    title: "AstroVeda — Free Kundli, Horoscope & Talk to Astrologers",
+    title: "AstroVedji — Free Kundli, Horoscope & Talk to Astrologers",
     description: SITE_DESC,
   },
   twitter: {
     card: "summary_large_image",
-    title: "AstroVeda — Free Kundli, Horoscope & Astrologers",
+    title: "AstroVedji — Free Kundli, Horoscope & Astrologers",
     description: SITE_DESC,
   },
   robots: { index: true, follow: true },
