@@ -82,8 +82,10 @@
   /* ---- Typography scale (single global knob) ---- */
   /* Base font size — bada/chhota karna ho to sirf yahi badlo (rem isi se scale) */
   --font-base: 100%;          /* 100% = 16px; e.g. 106.25% = 17px */
-  --leading-body: 1.6;        /* comfortable reading (1.4–1.6) */
-  --leading-heading: 1.2;
+  --leading-body: 1.65;       /* comfortable, airy reading */
+  --leading-heading: 1.15;    /* tight, professional headings */
+  --tracking-body: -0.011em;  /* subtle negative tracking = premium feel */
+  --tracking-heading: -0.02em;
 }
 
 @theme inline {
@@ -121,9 +123,12 @@ body {
   color: var(--foreground);
   font-family: var(--font-poppins), system-ui, sans-serif;
   font-size: 1rem; /* relative to html base */
-  line-height: var(--leading-body); /* 1.6 — comfortable reading */
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; /* crisper, lighter text on dark bg */
   text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt";
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -131,6 +136,7 @@ body {
 /* Headings sit tighter than body text */
 h1, h2, h3, h4, h5, h6 {
   line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
 }
 
 /* Reading text keeps comfortable spacing */

@@ -77,7 +77,7 @@ export default function Header() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-ink-dim hover:text-gold-400 hover:bg-white/5 no-underline px-3 py-2 text-[15px] rounded-lg transition-colors"
+              className="whitespace-nowrap text-ink-dim hover:text-gold-400 hover:bg-white/5 no-underline px-3 py-2 text-[15px] rounded-lg transition-colors"
             >
               {navLabel(l)}
             </Link>
