@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLang } from "@/context/LanguageContext";
+import { WHATSAPP_CHAT_URL } from "@/lib/site";
 
 const cols = [
   {
@@ -28,7 +29,7 @@ const cols = [
       ["foot.about", "/about"],
       ["foot.contact", "/contact"],
       ["foot.disclaimer", "/disclaimer"],
-      ["nav.talk", "/#astrologers"],
+      ["nav.talk", WHATSAPP_CHAT_URL],
     ],
   },
 ];
@@ -68,13 +69,25 @@ export default function Footer() {
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
                 {c.links.map(([labelKey, href]) => (
                   <li key={href}>
-                    <Link
-                      href={href}
-                      style={{ color: "var(--ink-dim)", textDecoration: "none", fontSize: 14 }}
-                      className="foot-link"
-                    >
-                      {t(labelKey)}
-                    </Link>
+                    {href.startsWith("https://") ? (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--ink-dim)", textDecoration: "none", fontSize: 14 }}
+                        className="foot-link"
+                      >
+                        {t(labelKey)}
+                      </a>
+                    ) : (
+                      <Link
+                        href={href}
+                        style={{ color: "var(--ink-dim)", textDecoration: "none", fontSize: 14 }}
+                        className="foot-link"
+                      >
+                        {t(labelKey)}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

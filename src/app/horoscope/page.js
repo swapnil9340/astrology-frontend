@@ -7,7 +7,8 @@ export const metadata = {
   description: "Aaj ka rashifal — apni rashi chuno aur AI-powered daily horoscope padho.",
   keywords: [
     "daily horoscope", "today horoscope", "aaj ka rashifal", "rashifal", "दैनिक राशिफल",
-    "आज का राशिफल", "horoscope today", "free horoscope", "zodiac horoscope", "राशिफल 2026",
+    "आज का राशिफल", "horoscope today", "free horoscope", "zodiac horoscope",
+    "सभी राशियों का राशिफल", "आज का भविष्यफल", "daily horoscope in hindi",
   ],
 };
 

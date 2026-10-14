@@ -6,27 +6,18 @@ import { AuthProvider } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-import { SITE_URL, SITE_NAME, SITE_DESC } from "@/lib/site";
+import { SITE_URL, SITE_NAME, SITE_DESC, SITE_KEYWORDS } from "@/lib/site";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: "AstroVedji — Free Kundli, Horoscope & Talk to Astrologers",
   description: SITE_DESC,
   applicationName: SITE_NAME,
-  keywords: [
-    // English — high-volume
-    "free kundli", "online kundli", "janam kundli", "birth chart", "online astrology",
-    "daily horoscope", "today horoscope", "horoscope 2026", "zodiac signs", "moon sign",
-    "kundli matching", "horoscope matching", "guna milan", "mangal dosha", "marriage prediction",
-    "panchang", "aaj ka panchang", "rahu kaal", "shubh muhurat", "numerology",
-    "tarot reading", "palmistry", "lal kitab", "gemstones", "talk to astrologer",
-    "online astrologer", "best astrologer", "love horoscope", "career horoscope",
-    // Hindi — high-volume
-    "फ्री कुंडली", "जन्म कुंडली", "कुंडली मिलान", "गुण मिलान", "मंगल दोष",
-    "राशिफल", "आज का राशिफल", "दैनिक राशिफल", "राशिफल 2026", "पंचांग",
-    "आज का पंचांग", "राहु काल", "शुभ मुहूर्त", "अंक ज्योतिष", "ज्योतिषी से बात करें",
-  ],
-  alternates: { canonical: "/" },
+  keywords: SITE_KEYWORDS,
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": `${SITE_URL}/feed.xml` },
+  },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

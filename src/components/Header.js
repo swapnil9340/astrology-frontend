@@ -9,6 +9,7 @@ import PersonOutlineIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import TranslateIcon from "@mui/icons-material/Translate";
 import { navLinks } from "@/lib/data";
+import { WHATSAPP_CHAT_URL } from "@/lib/site";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LanguageContext";
 
@@ -112,12 +113,14 @@ export default function Header() {
             )
           )}
 
-          <Link
-            href="/#astrologers"
+          <a
+            href={WHATSAPP_CHAT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-gold hidden md:inline-flex items-center gap-1.5 px-[18px] py-[9px] rounded-full no-underline text-sm"
           >
             <ChatBubbleOutlineIcon sx={{ fontSize: 16 }} /> {t("nav.talk")}
-          </Link>
+          </a>
 
           {/* Language toggle — desktop (beside auth) & mobile (beside hamburger) */}
           <LangToggle />
@@ -151,13 +154,15 @@ export default function Header() {
               {navLabel(l)}
             </Link>
           ))}
-          <Link
-            href="/#astrologers"
+          <a
+            href={WHATSAPP_CHAT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="btn-gold inline-flex items-center justify-center gap-1.5 text-center px-3 py-3 rounded-full no-underline mt-2"
           >
             <ChatBubbleOutlineIcon sx={{ fontSize: 18 }} /> {t("nav.talk")}
-          </Link>
+          </a>
 
           {/* Auth (mobile) */}
           {!loading && (

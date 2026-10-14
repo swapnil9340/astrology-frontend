@@ -3,6 +3,7 @@
 import { astrologers } from "@/lib/data";
 import SectionHeading from "./SectionHeading";
 import { useLang } from "@/context/LanguageContext";
+import { WHATSAPP_CHAT_URL } from "@/lib/site";
 
 export default function Astrologers() {
   const { t } = useLang();
@@ -71,12 +72,24 @@ export default function Astrologers() {
 
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 16 }}>
                 <span className="gold-text font-display" style={{ fontSize: 18, fontWeight: 700 }}>${a.rate}/min</span>
-                <button
-                  className="btn-gold"
-                  style={{ padding: "8px 16px", borderRadius: 999, border: "none", cursor: "pointer", fontSize: 13 }}
-                >
-                  {a.online ? t("astro.chat") : t("astro.notify")}
-                </button>
+                {a.online ? (
+                  <a
+                    href={WHATSAPP_CHAT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold no-underline"
+                    style={{ padding: "8px 16px", borderRadius: 999, fontSize: 13 }}
+                  >
+                    {t("astro.chat")}
+                  </a>
+                ) : (
+                  <button
+                    className="btn-gold"
+                    style={{ padding: "8px 16px", borderRadius: 999, border: "none", cursor: "pointer", fontSize: 13 }}
+                  >
+                    {t("astro.notify")}
+                  </button>
+                )}
               </div>
             </article>
           ))}

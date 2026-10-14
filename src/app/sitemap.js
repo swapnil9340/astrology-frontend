@@ -47,7 +47,7 @@ export default function sitemap() {
   const listed = new Set(staticPages.map((p) => p.url));
   const servicePages = services
     .map((s) => u(s.href))
-    .filter((url) => !listed.has(url))
+    .filter((url) => !listed.has(url) && url !== u("/kundli"))
     .map((url) => ({ url, lastModified: now, changeFrequency: "monthly", priority: 0.5 }));
 
   return [...staticPages, ...horoscopePages, ...servicePages];

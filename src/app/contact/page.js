@@ -5,6 +5,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import PlaceIcon from "@mui/icons-material/Place";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
+import { WHATSAPP_CHAT_URL } from "@/lib/site";
 
 export const metadata = {
   title: "Contact Us — AstroVedji",
@@ -14,7 +15,7 @@ export const metadata = {
 const channels = [
   { Icon: EmailIcon, label: "Email", value: "support@astrovedji.in", note: "We reply within 24 hours" },
   { Icon: CallIcon, label: "Phone", value: "+91 98765 43210", note: "Mon–Sat, 9 AM – 8 PM IST" },
-  { Icon: ChatIcon, label: "Live chat", value: "Talk to an astrologer", note: "Available 24×7 in the app" },
+  { Icon: ChatIcon, label: "Live chat", value: "Talk to an astrologer", note: "Chat with us on WhatsApp", href: WHATSAPP_CHAT_URL },
   { Icon: PlaceIcon, label: "Office", value: "Jaipur, Rajasthan, India", note: "Visits by appointment" },
 ];
 
@@ -32,14 +33,20 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-7 items-start">
           {/* Channels */}
           <div className="grid gap-4">
-            {channels.map(({ Icon, label, value, note }) => (
+            {channels.map(({ Icon, label, value, note, href }) => (
               <div key={label} className="glass card-hover rounded-2xl p-5 flex gap-4 items-start">
                 <div className="w-[46px] h-[46px] shrink-0 rounded-xl grid place-items-center bg-[radial-gradient(circle_at_35%_30%,#2a3577,#131a45)] border border-white/10">
                   <Icon className="text-gold-400" sx={{ fontSize: 22 }} />
                 </div>
                 <div>
                   <div className="text-ink-dim text-[13px]">{label}</div>
-                  <div className="text-base font-semibold">{value}</div>
+                  {href ? (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-gold-400 no-underline hover:underline">
+                      {value}
+                    </a>
+                  ) : (
+                    <div className="text-base font-semibold">{value}</div>
+                  )}
                   <div className="text-ink-dim text-[13px] mt-0.5">{note}</div>
                 </div>
               </div>
