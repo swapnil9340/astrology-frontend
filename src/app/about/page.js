@@ -5,25 +5,19 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import PublicIcon from "@mui/icons-material/Public";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PageHero from "@/components/PageHero";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "About Us — AstroVedji",
-  description:
-    "AstroVedji blends authentic Vedic astrology with modern technology to bring you free kundli, honest horoscopes and trusted astrologer consultations.",
-};
+export const metadata = pageMetadata({
+  path: "/about",
+  title: "About AstroVedji: Vedic Astrology Tools and Guides",
+  description: "Learn how AstroVedji calculates a public Vedic chart preview and provides daily horoscope and Panchang information.",
+});
 
 const values = [
-  { Icon: VerifiedIcon, title: "Authenticity", desc: "Every calculation follows classical Vedic principles — no shortcuts, no vague guesswork." },
-  { Icon: HandshakeIcon, title: "Trust", desc: "Verified astrologers, transparent pricing and privacy-first handling of your birth details." },
-  { Icon: AutoAwesomeIcon, title: "Clarity", desc: "We turn complex charts into guidance you can actually understand and act on." },
-  { Icon: PublicIcon, title: "Accessibility", desc: "Free core tools in your language, on any device, for seekers everywhere." },
-];
-
-const stats = [
-  ["50L+", "Kundlis generated"],
-  ["1200+", "Verified astrologers"],
-  ["25+", "Years of tradition"],
-  ["4.9★", "Average rating"],
+  { Icon: VerifiedIcon, title: "Clear calculations", desc: "Chart placements are shown separately from belief-based interpretations." },
+  { Icon: HandshakeIcon, title: "Honest limitations", desc: "Astrology readings are not presented as guaranteed outcomes or professional advice." },
+  { Icon: AutoAwesomeIcon, title: "Understandable tools", desc: "Chart and Panchang terms are explained in straightforward language." },
+  { Icon: PublicIcon, title: "Accessible preview", desc: "The public chart preview is available online without creating an account." },
 ];
 
 export default function AboutPage() {
@@ -32,36 +26,24 @@ export default function AboutPage() {
       <PageHero
         emoji="🔯"
         breadcrumb={<><Link href="/" className="text-gold-400 no-underline hover:underline">Home</Link> / About Us</>}
-        title="Guided by the stars, grounded in tradition"
-        subtitle="AstroVedji is where centuries-old Vedic wisdom meets modern technology — helping millions find clarity, one chart at a time."
+        title="Vedic astrology tools, explained clearly"
+        subtitle="AstroVedji offers a public birth-chart preview, daily rashifal and live Panchang information."
       />
 
       <div className="container-x pb-5">
         {/* Story */}
         <div className="glass rounded-[22px] px-[30px] py-[34px] mb-10">
-          <h2 className="font-display gold-text text-[26px] mt-0">Our Story</h2>
+          <h2 className="font-display gold-text text-[26px] mt-0">What AstroVedji offers</h2>
           <p className="text-ink-dim text-base leading-8">
-            AstroVedji began with a simple belief — that the timeless knowledge of Jyotish should be
-            available to everyone, not locked away in dusty manuscripts or expensive consultations.
-            What started as a small circle of astrologers and engineers has grown into a trusted
-            platform serving millions of seekers across the world.
+            AstroVedji is a web project for people exploring Vedic astrology. The public birth-chart
+            preview uses a birth date and, when provided, time and place to calculate chart details
+            such as the Moon sign, Sun sign, nakshatra and ascendant.
           </p>
           <p className="text-ink-dim text-base leading-8 mb-0">
-            Today we combine precise astronomical calculations with the guidance of experienced
-            practitioners, so whether you want a free kundli, a daily rashifal or a heart-to-heart
-            with an astrologer, you get answers rooted in authentic tradition — delivered with the
-            ease of modern technology.
+            Daily horoscope pages and the Panchang display offer additional astrology-related
+            information. Interpretations are for reflection and entertainment; they do not establish
+            facts about the future or replace professional advice.
           </p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 mb-12">
-          {stats.map(([n, l]) => (
-            <div key={l} className="glass card-hover rounded-[18px] p-6 text-center">
-              <div className="gold-text font-display text-[30px] font-bold">{n}</div>
-              <div className="text-ink-dim text-sm mt-1">{l}</div>
-            </div>
-          ))}
         </div>
 
         {/* Values */}

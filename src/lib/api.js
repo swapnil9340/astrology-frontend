@@ -20,11 +20,13 @@ const API_URL = resolveApiUrl();
 
 /** Error carrying the server's status + field-level messages. */
 export class ApiError extends Error {
-  constructor(message, { status, fields } = {}) {
+  constructor(message, { status, fields, code, reason } = {}) {
     super(message);
     this.name = "ApiError";
     this.status = status;
     this.fields = fields || null;
+    this.code = code;
+    this.reason = reason;
   }
 }
 
@@ -48,6 +50,8 @@ async function request(path, { method = "GET", body, token } = {}) {
     throw new ApiError(data.error || "Something went wrong.", {
       status: res.status,
       fields: data.fields,
+      code: data.code,
+      reason: data.reason,
     });
   }
   return data;
@@ -63,6 +67,9 @@ export const apiMe = (token) => request("/api/auth/me", { token });
 
 export const apiPredictBasic = (token) =>
   request("/api/predict/basic", { method: "POST", token });
+
+export const apiPredictLove = (token) =>
+  request("/api/predict/love", { method: "POST", token });
 
 export const apiPredictHistory = (token) =>
   request("/api/predict/history", { token });

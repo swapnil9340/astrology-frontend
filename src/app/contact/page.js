@@ -6,11 +6,13 @@ import PlaceIcon from "@mui/icons-material/Place";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 import { WHATSAPP_CHAT_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact Us — AstroVedji",
-  description: "Get in touch with the AstroVedji team for support, consultations or partnership enquiries.",
-};
+export const metadata = pageMetadata({
+  path: "/contact",
+  title: "Contact AstroVedji: Support and Enquiries",
+  description: "Contact AstroVedji for website support, astrology tool questions, consultations or partnership enquiries.",
+});
 
 const channels = [
   { Icon: EmailIcon, label: "Email", value: "support@astrovedji.in", note: "We reply within 24 hours" },

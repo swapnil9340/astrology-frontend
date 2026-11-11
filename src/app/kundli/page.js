@@ -27,6 +27,7 @@ export default function KundliPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [paywall, setPaywall] = useState(false);
+  const [upgradeRequired, setUpgradeRequired] = useState(false);
   const [buying, setBuying] = useState(false);
 
   // Cost-aware: show the latest saved reading if one exists; only call the AI
@@ -36,6 +37,7 @@ export default function KundliPage() {
     setStatus("loading");
     setError("");
     setPaywall(false);
+    setUpgradeRequired(false);
     try {
       if (!force) {
         const hist = await apiPredictHistory(token);
@@ -50,7 +52,8 @@ export default function KundliPage() {
       setData({ chart: res.chart, prediction: res.prediction });
       setStatus("done");
     } catch (err) {
-      if (err.status === 402) setPaywall(true);
+      if (err.code === "PAYMENT_REQUIRED") setPaywall(true);
+      if (err.code === "LIMIT_REACHED") setUpgradeRequired(true);
       setError(err.message || "Something went wrong.");
       setStatus("error");
     }
@@ -142,6 +145,9 @@ export default function KundliPage() {
         {status === "error" && !paywall && (
           <div className="glass rounded-[22px] p-8 text-center max-w-[520px] mx-auto border border-rose-500/30">
             <p className="text-ink">{error}</p>
+            {upgradeRequired && (
+              <Link href="/pricing" className="text-gold-400 no-underline hover:underline">Upgrade your plan</Link>
+            )}
             <button onClick={() => load(false)} className="btn-gold inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none cursor-pointer mt-4">
               <RefreshIcon sx={{ fontSize: 18 }} /> Try again
             </button>

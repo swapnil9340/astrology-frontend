@@ -32,10 +32,11 @@ export async function GET() {
   }).join("");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${SITE_NAME} — Daily Rashifal</title>
     <link>${SITE_URL}/horoscope</link>
+    <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml" />
     <description>Daily horoscope and rashifal in Hindi and English for all 12 zodiac signs.</description>
     <language>hi-IN</language>
     <lastBuildDate>${now.toUTCString()}</lastBuildDate>${items}

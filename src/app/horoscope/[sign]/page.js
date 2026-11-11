@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import PageHero from "@/components/PageHero";
 import RashifalView from "@/components/RashifalView";
 import { zodiacSigns } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
 function findSign(slug) {
   return zodiacSigns.find((z) => z.name.toLowerCase() === String(slug).toLowerCase());
@@ -15,18 +16,20 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { sign } = await params;
   const z = findSign(sign);
-  if (!z) return { title: "Rashifal — AstroVedji" };
+  if (!z) return { title: "Rashifal — AstroVedji", robots: { index: false, follow: true } };
   const n = z.name;
-  return {
-    title: `${n} Daily Horoscope Today — AstroVedji`,
-    description: `Aaj ka ${n} (${z.hindi}) rashifal — love, career, health, lucky number & color.`,
+  return pageMetadata({
+    path: `/horoscope/${n.toLowerCase()}`,
+    title: `${n} Horoscope Today & ${z.transliteration} Rashifal | AstroVedji`,
+    description: `Read today's ${n} horoscope (aaj ka ${z.transliteration} rashifal) for love, career, health, finance and lucky details.`,
     keywords: [
-      `${n} horoscope today`, `${n} daily horoscope`, `${n} horoscope`, `${n} rashifal`,
-      `${z.hindi} rashifal`, `aaj ka ${n} rashifal`, `${n} love horoscope`, `${n} career horoscope`,
-      "daily horoscope", "rashifal",
+      `${n.toLowerCase()} horoscope today`,
+      `${n.toLowerCase()} daily horoscope`,
+      `${z.transliteration.toLowerCase()} rashifal`,
+      `aaj ka ${z.transliteration.toLowerCase()} rashifal`,
+      `${z.hindi} राशिफल`,
     ],
-    alternates: { canonical: `/horoscope/${n.toLowerCase()}` },
-  };
+  });
 }
 
 export default async function SignRashifalPage({ params }) {
@@ -48,12 +51,12 @@ export default async function SignRashifalPage({ params }) {
             <Link href="/horoscope" className="text-gold-400 no-underline hover:underline">Horoscope</Link> / {z.name}
           </>
         }
-        title={`${z.name} — Aaj ka Rashifal`}
+        title={`${z.name} Rashifal Today — Aaj ka ${z.transliteration} Rashifal`}
         subtitle={`${z.hindi} • ${z.dates} • ${z.element}`}
       />
 
       <div className="container-x pb-8">
-        <RashifalView slug={z.name.toLowerCase()} />
+        <RashifalView slug={z.name.toLowerCase()} sign={z.name} hindi={z.hindi} />
 
         {/* prev / next sign */}
         <div className="flex items-center justify-between max-w-[820px] mx-auto mt-8">
@@ -65,6 +68,11 @@ export default async function SignRashifalPage({ params }) {
             {next.symbol} {next.name} →
           </Link>
         </div>
+        <nav aria-label="Related astrology tools" className="mx-auto mt-6 flex max-w-[820px] flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+          <Link href="/panchang" className="text-gold-400 no-underline hover:underline">Today’s Panchang</Link>
+          <Link href="/kundli-matching" className="text-gold-400 no-underline hover:underline">Kundli matching guide</Link>
+          <Link href="/#free-kundli-calculator" className="text-gold-400 no-underline hover:underline">Free Kundli preview</Link>
+        </nav>
       </div>
     </>
   );

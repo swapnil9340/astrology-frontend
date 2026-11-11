@@ -1,16 +1,14 @@
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { zodiacSigns } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Daily Horoscope — AstroVedji",
-  description: "Aaj ka rashifal — apni rashi chuno aur AI-powered daily horoscope padho.",
-  keywords: [
-    "daily horoscope", "today horoscope", "aaj ka rashifal", "rashifal", "दैनिक राशिफल",
-    "आज का राशिफल", "horoscope today", "free horoscope", "zodiac horoscope",
-    "सभी राशियों का राशिफल", "आज का भविष्यफल", "daily horoscope in hindi",
-  ],
-};
+export const metadata = pageMetadata({
+  path: "/horoscope",
+  title: "Daily Horoscope Today & Aaj Ka Rashifal | AstroVedji",
+  description: "Read aaj ka rashifal and today's horoscope for all 12 zodiac signs, with daily guidance for love, career, health and finance.",
+  keywords: ["daily horoscope today", "aaj ka rashifal", "today horoscope", "आज का राशिफल", "daily rashifal in hindi"],
+});
 
 export default function HoroscopePage() {
   return (

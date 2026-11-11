@@ -2,12 +2,13 @@ import Link from "next/link";
 import GavelIcon from "@mui/icons-material/Gavel";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PageHero from "@/components/PageHero";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Disclaimer — AstroVedji",
-  description:
-    "Read the AstroVedji disclaimer regarding the use of astrology content, predictions, remedies and consultations provided on this website.",
-};
+export const metadata = pageMetadata({
+  path: "/disclaimer",
+  title: "AstroVedji Disclaimer: Astrology and Predictions",
+  description: "Read how AstroVedji horoscope, chart, prediction and remedy content should be used, including important professional-advice limitations.",
+});
 
 const sections = [
   {

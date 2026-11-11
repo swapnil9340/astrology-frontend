@@ -14,7 +14,7 @@ import { apiRashifal } from "@/lib/api";
 import { getRashifal } from "@/lib/rashifal";
 import { useLang } from "@/context/LanguageContext";
 
-export default function RashifalView({ slug }) {
+export default function RashifalView({ slug, sign, hindi }) {
   const { lang } = useLang();
   const [state, setState] = useState({ status: "loading", data: null, source: "" });
 
@@ -45,7 +45,10 @@ export default function RashifalView({ slug }) {
 
   const r = state.data;
   return (
-    <div className="grid gap-5 max-w-[820px] mx-auto">
+    <div className="mx-auto grid max-w-[820px] gap-5">
+      <p className="m-0 text-center text-sm leading-7 text-ink-dim">
+        Read the daily {sign} horoscope (aaj ka {hindi} rashifal), including guidance for love, career, health and finance.
+      </p>
       {/* ratings */}
       {r.ratings && (
         <div className="glass rounded-[20px] p-6 grid gap-4">

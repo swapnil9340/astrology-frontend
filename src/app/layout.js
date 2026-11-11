@@ -5,12 +5,13 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteStructuredData from "@/components/SiteStructuredData";
 
 import { SITE_URL, SITE_NAME, SITE_DESC, SITE_KEYWORDS } from "@/lib/site";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "AstroVedji — Free Kundli, Horoscope & Talk to Astrologers",
+  title: "Free Kundli Online by Date of Birth | AstroVedji",
   description: SITE_DESC,
   applicationName: SITE_NAME,
   keywords: SITE_KEYWORDS,
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
         <ThemeRegistry>
           <LanguageProvider>
             <AuthProvider>
+              <SiteStructuredData />
               <StarfieldBackground />
               <div className="relative z-[1]">
                 <Header />

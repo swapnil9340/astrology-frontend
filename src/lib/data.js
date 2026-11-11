@@ -1,18 +1,18 @@
 // Static content used across the site.
 
 export const zodiacSigns = [
-  { name: "Aries", hindi: "मेष", symbol: "♈", dates: "Mar 21 – Apr 19", element: "Fire" },
-  { name: "Taurus", hindi: "वृषभ", symbol: "♉", dates: "Apr 20 – May 20", element: "Earth" },
-  { name: "Gemini", hindi: "मिथुन", symbol: "♊", dates: "May 21 – Jun 20", element: "Air" },
-  { name: "Cancer", hindi: "कर्क", symbol: "♋", dates: "Jun 21 – Jul 22", element: "Water" },
-  { name: "Leo", hindi: "सिंह", symbol: "♌", dates: "Jul 23 – Aug 22", element: "Fire" },
-  { name: "Virgo", hindi: "कन्या", symbol: "♍", dates: "Aug 23 – Sep 22", element: "Earth" },
-  { name: "Libra", hindi: "तुला", symbol: "♎", dates: "Sep 23 – Oct 22", element: "Air" },
-  { name: "Scorpio", hindi: "वृश्चिक", symbol: "♏", dates: "Oct 23 – Nov 21", element: "Water" },
-  { name: "Sagittarius", hindi: "धनु", symbol: "♐", dates: "Nov 22 – Dec 21", element: "Fire" },
-  { name: "Capricorn", hindi: "मकर", symbol: "♑", dates: "Dec 22 – Jan 19", element: "Earth" },
-  { name: "Aquarius", hindi: "कुम्भ", symbol: "♒", dates: "Jan 20 – Feb 18", element: "Air" },
-  { name: "Pisces", hindi: "मीन", symbol: "♓", dates: "Feb 19 – Mar 20", element: "Water" },
+  { name: "Aries", hindi: "मेष", transliteration: "Mesh", symbol: "♈", dates: "Mar 21 – Apr 19", element: "Fire" },
+  { name: "Taurus", hindi: "वृषभ", transliteration: "Vrishabh", symbol: "♉", dates: "Apr 20 – May 20", element: "Earth" },
+  { name: "Gemini", hindi: "मिथुन", transliteration: "Mithun", symbol: "♊", dates: "May 21 – Jun 20", element: "Air" },
+  { name: "Cancer", hindi: "कर्क", transliteration: "Kark", symbol: "♋", dates: "Jun 21 – Jul 22", element: "Water" },
+  { name: "Leo", hindi: "सिंह", transliteration: "Singh", symbol: "♌", dates: "Jul 23 – Aug 22", element: "Fire" },
+  { name: "Virgo", hindi: "कन्या", transliteration: "Kanya", symbol: "♍", dates: "Aug 23 – Sep 22", element: "Earth" },
+  { name: "Libra", hindi: "तुला", transliteration: "Tula", symbol: "♎", dates: "Sep 23 – Oct 22", element: "Air" },
+  { name: "Scorpio", hindi: "वृश्चिक", transliteration: "Vrishchik", symbol: "♏", dates: "Oct 23 – Nov 21", element: "Water" },
+  { name: "Sagittarius", hindi: "धनु", transliteration: "Dhanu", symbol: "♐", dates: "Nov 22 – Dec 21", element: "Fire" },
+  { name: "Capricorn", hindi: "मकर", transliteration: "Makar", symbol: "♑", dates: "Dec 22 – Jan 19", element: "Earth" },
+  { name: "Aquarius", hindi: "कुम्भ", transliteration: "Kumbh", symbol: "♒", dates: "Jan 20 – Feb 18", element: "Air" },
+  { name: "Pisces", hindi: "मीन", transliteration: "Meen", symbol: "♓", dates: "Feb 19 – Mar 20", element: "Water" },
 ];
 
 export const services = [
@@ -22,6 +22,13 @@ export const services = [
     desc: "Generate your detailed Vedic birth chart with planetary positions & dashas.",
     href: "/kundli",
     accent: "gold",
+  },
+  {
+    icon: "💖",
+    title: "Love Prediction",
+    desc: "Explore relationship guidance grounded in your Vedic birth chart.",
+    href: "/love",
+    accent: "rose",
   },
   {
     icon: "💑",

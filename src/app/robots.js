@@ -13,20 +13,27 @@ export default function robots() {
       },
       // Search and user-requested retrieval are allowed; model-training crawlers stay blocked.
       {
-        userAgent: ["OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User"],
+        userAgent: [
+          "OAI-SearchBot",
+          "ChatGPT-User",
+          "Claude-SearchBot",
+          "Claude-User",
+          "PerplexityBot",
+          "Perplexity-User",
+        ],
         allow: ["/", "/kundli-matching"],
-        disallow: ["/login", "/register", "/kundli", "/api/"],
+        disallow: ["/api/"],
       },
       {
-        userAgent: ["Googlebot", "Google-Extended"],
-        allow: ["/", "/kundli-matching"],
-        disallow: ["/login", "/register", "/kundli", "/api/"],
+        userAgent: ["Googlebot", "Google-Extended", "Bingbot"],
+        allow: ["/"],
+        disallow: ["/api/"],
       },
       {
         userAgent: "*",
-        allow: ["/", "/kundli-matching"],
-        // private / non-content routes
-        disallow: ["/login", "/register", "/kundli", "/api/"],
+        allow: ["/"],
+        // Keep noindex pages crawlable so search engines can read their robots metadata.
+        disallow: ["/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

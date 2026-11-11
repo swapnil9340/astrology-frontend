@@ -64,7 +64,8 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
         ├── api.js           # Backend API client (register/login/me)
         ├── data.js          # Static content (zodiac, services, astrologers, navLinks)
         ├── rashifal.js      # static daily rashifal (fallback for AI)
-        └── wikipedia.js     # getWikiSummary() — placeholder content for service pages
+        ├── seo.js           # Shared per-route metadata and canonical URL helper
+        └── site.js          # Canonical site URL, brand description and keyword defaults
 ```
 
 ### Components (`src/components/`)
@@ -76,7 +77,7 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `Header.js` | client | Sticky nav, logo, hamburger (mobile), **auth-aware** (Sign in / user + logout) |
 | `Footer.js` | server | Link columns + socials |
 | `Hero.js` | client | Headline + **free-kundli form** (birth date → moon sign) |
-| `ServicesGrid.js` | server | 8 service cards (kundli, matching, horoscope…) |
+| `ServicesGrid.js` | server | 9 service cards (kundli, love prediction, matching, horoscope…) |
 | `ZodiacGrid.js` | client | 12 signs; sign tap → daily reading + love/career/health bars |
 | `Astrologers.js` | server | Marquee of astrologer cards (online status, rate) |
 | `Panchang.js` | server | Aaj ka panchang (tithi, nakshatra, muhurat…) |
@@ -85,8 +86,9 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | `PageHero.js` | server | Inner-page hero band (breadcrumb + title) |
 | `AuthForm.js` | client | Shared login/register form (`mode` prop); uses `useAuth` + redirects |
 | `ContactForm.js` | client | Contact page form (demo, no backend yet) |
-| `InfoPage.js` | server (async) | Reusable service page; fetches Wikipedia placeholder content |
+| `InfoPage.js` | server | Reusable service guide with original, page-specific content |
 | `RashifalView.js` | client | Fetches today's AI rashifal (`/api/rashifal`), static fallback; used by `/horoscope/[sign]` |
+| `SiteStructuredData.js` | server | Organization and WebSite JSON-LD |
 
 ---
 
@@ -95,17 +97,18 @@ astrology-frontend/          # repo root = Next.js app (flattened, no nested fol
 | Route | File | Notes |
 |-------|------|-------|
 | `/` | `app/page.js` | Homepage — Hero, Services, Zodiac, Astrologers, Panchang, CTA |
-| `/about` | `app/about/page.js` | Story, values, stats |
+| `/about` | `app/about/page.js` | About and service limitations |
 | `/contact` | `app/contact/page.js` | Channels + contact form |
 | `/disclaimer` | `app/disclaimer/page.js` | Legal disclaimer |
 | `/login` | `app/login/page.js` | `<AuthForm mode="login" />` |
 | `/register` | `app/register/page.js` | `<AuthForm mode="register" />` |
 | `/kundli` | `app/kundli/page.js` | **Free Kundli** — login-gated; shows chart + AI prediction |
+| `/love` | `app/love/page.js` | **Love prediction** — login-gated chart-based reading |
 | `/horoscope` | `app/horoscope/page.js` | 12-sign grid → per-sign rashifal |
 | `/horoscope/[sign]` | `app/horoscope/[sign]/page.js` | **AI daily rashifal** (free, no login) via `RashifalView` |
-| `/kundli-matching` | `app/kundli-matching/page.js` | **Kundli Milan** — 2-person form → Divine API PDF report (`MatchMaking`, login-gated) |
-| `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Service pages — `<InfoPage>` with **Wikipedia** placeholder content (temp) |
-| `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + Wikipedia info |
+| `/kundli-matching` | `app/kundli-matching/page.js` | Guna Milan guide and 2-person form; verify backend `/api/match` availability before promoting the report flow |
+| `/tarot` `/numerology` `/lal-kitab` `/palmistry` `/gemstones` | `app/<name>/page.js` | Original educational guides; interactive tools are identified when unavailable |
+| `/panchang` | `app/panchang/page.js` | Live `<Panchang>` + explanatory guide |
 | `/careers` | `app/careers/page.js` | Static careers listing |
 | `/pricing` | `app/pricing/page.js` | Subscription plans (free/silver/gold/platinum) from `/api/plans` |
 
@@ -142,14 +145,15 @@ Animations (hand-tuned keyframes): `spin-slow`/`spin-reverse`, `float-y`, `fade-
 
 Flow: `AuthForm` → `useAuth()` → `api.js` → backend → token localStorage → header updates.
 
-- **`lib/api.js`** — `apiRegister`, `apiLogin`, `apiMe`, `apiPredictBasic(token)`,
+- **`lib/api.js`** — `apiRegister`, `apiLogin`, `apiMe`, `apiPredictBasic(token)`, `apiPredictLove(token)`,
   `apiPredictHistory(token)`, `apiPanchang(params)` (public), `apiChart(payload)` (public,
   compute-only), `apiPlans()`, `apiCreateOrder(token,payload)`, `apiVerifyPayment(token,payload)`.
   Base URL `NEXT_PUBLIC_API_URL`.
 - **`lib/payment.js`** — `startPayment({kind,itemId,token,user})`: create order → Razorpay
   checkout (script loaded on demand) → verify. Returns credits/subscription. Used by
-  `/pricing` (plans) and `/kundli` paywall (packs).
-  `ApiError` class status + field-errors carry karti hai. Network fail pe friendly message.
+  `/pricing` (plans) and `/kundli` / `/love` paywalls (packs).
+  `ApiError` carries status, field errors, and backend error codes for quota/paywall handling.
+  Network fail pe friendly message.
 - **`context/AuthContext.js`** — `AuthProvider` (layout mein wrapped). State: `user`,
   `token`, `loading`. Mount pe localStorage se token restore karke `/me` se verify karta hai.
   Exposes: `login(email, pw)`, `register(payload)`, `logout()`.
@@ -204,15 +208,16 @@ npm run build && npm start   # production
 | **Login / Register (API-integrated)** | ✅ Done | JWT, AuthContext, header state |
 | **Register captures birth details + phone** | ✅ Done | gender, DOB, time, place, phone → basic prediction base |
 | **Free Kundli page (`/kundli`)** | ✅ Done | login-gated; real chart + AI prediction, history-first (cost-aware), regenerate |
-| **Free-3 limit + paywall** | ✅ Done | 3 free kundlis; 402 pe paywall card (₹100=10, pack "coming soon") |
+| **Love prediction (`/love`)** | ✅ Done | login-gated; chart-grounded AI relationship reading, history-first, regenerate |
+| **Free-3 limit + paywall** | ✅ Done | 3 free AI readings; 402 pe paywall card (₹100=10) |
 | **Kundli Matching (Divine API)** | ✅ Done | `/kundli-matching` 2-person form → `apiMatch` → Divine PDF report in iframe (login-gated) |
 | **Subscription plans page (`/pricing`)** | ✅ Done | plans + **live Razorpay subscribe** |
 | **Payments (Razorpay)** | ✅ Done | pack buy (paywall) + plan subscribe (pricing); verify → credits/subscription; `refreshUser()` |
 | Print/PDF · talk-to-pandit | ⏳ Planned | see PROJECT_PLAN monetization |
 | **Panchang — real-time** | ✅ Done | homepage fetches live `/api/panchang` (was hardcoded) |
-| **SEO + AI discovery** | ✅ Done | Data-driven `app/sitemap.js` (excludes login-gated kundli), `app/robots.js` (OpenAI/Claude search + fetch and Googlebot/Google-Extended allowed; GPTBot/ClaudeBot training blocked), `/feed.xml` daily rashifal RSS, `/llms.txt` site index, RSS alternate metadata. `lib/site.js` = `SITE_URL`. Search/indexing is not guaranteed. See `AstroVedji_SEO_Plan.xlsx` |
+| **SEO + AI discovery** | ✅ Implemented; monitor after deployment | Route-specific title/description/keywords/canonicals, Open Graph/Twitter, Organization/WebSite JSON-LD, data-driven sitemap, crawlable noindex pages, search/retrieval bots allowed while training bots remain blocked, daily-rashifal RSS, and `/llms.txt`. Search visibility and AI citations are not guaranteed. Search suggestions are not verified volume data; use Search Console/Keyword Planner. See `AstroVeda_SEO_Plan.xlsx` |
 | Real astrology calculations | ⏳ Planned | Abhi frontend demo logic |
-| Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | **Wikipedia** placeholder content (`InfoPage`) — apni API se replace hoga |
+| Service sub-pages (horoscope, matching, panchang, tarot, numerology, lal-kitab, palmistry, gemstones, careers) | ✅ Done | Original educational content; some advertised interactive tools are not yet available |
 | Protected pages / user dashboard | ⏳ Planned | "My Kundli", saved charts |
 | Talk-to-astrologer (chat/call) | ⏳ Planned | |
 | Forgot password UI | ⏳ Planned | backend ready hone pe |

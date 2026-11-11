@@ -49,7 +49,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative pt-[70px] pb-10">
+    <section id="free-kundli-calculator" className="relative pt-[70px] pb-10">
       <div className="container-x grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
         {/* Left: headline */}
         <div className="fade-up text-center lg:text-left">
@@ -64,9 +64,9 @@ export default function Hero() {
           </p>
           <div className="flex gap-7 mt-7 flex-wrap justify-center lg:justify-start">
             {[
-              ["50L+", t("hero.stat.kundlis")],
-              ["1200+", t("hero.stat.astrologers")],
-              ["4.9★", t("hero.stat.rating")],
+              ["12", t("hero.stat.kundlis")],
+              ["Free", t("hero.stat.astrologers")],
+              ["EN + HI", t("hero.stat.rating")],
             ].map(([n, l]) => (
               <div key={l}>
                 <div className="gold-text font-display text-[26px] font-bold">{n}</div>

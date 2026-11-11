@@ -1,10 +1,12 @@
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Careers — AstroVedji",
-  description: "Join the AstroVedji team — astrologers, engineers and creators.",
-};
+export const metadata = pageMetadata({
+  path: "/careers",
+  title: "Careers at AstroVedji",
+  description: "Explore remote consultant, engineering and astrology-content roles listed by AstroVedji.",
+});
 
 const roles = [
   { title: "Vedic Astrologer (Consultant)", type: "Remote · Part/Full-time", desc: "Verified astrologers for chat/call consultations." },
